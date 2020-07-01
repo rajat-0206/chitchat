@@ -16,8 +16,7 @@ import requests
 import json
 import hashlib, binascii
 from django.contrib.sessions.models import Session
-from firebase import firebase
-firebase = firebase.FirebaseApplication('https://chat-app-30a48.firebaseio.com/', None)
+
 from .models import message_save,lastmessage
 
 global logged
