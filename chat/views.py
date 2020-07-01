@@ -76,7 +76,7 @@ def room(request, room_name):
 
     for l in latestmessage:
 
-        if l.cus_id=="http://127.0.0.1:8000/chating/"+room_name :
+        if l.cus_id=="https://itschitchat.herokuapp.com/chating/"+room_name :
             l.flag='y'
             l.save()
 
@@ -90,7 +90,7 @@ def latest(request):
     latestmessage=lastmessage.objects.filter(Uname=username)[::-1]
     for l in latestmessage:
 
-        if l.cus_id=="http://127.0.0.1:8000/chating/"+room_name :
+        if l.cus_id=="https://itschitchat.herokuapp.com/chating/"+room_name :
             l.flag='y'
             l.save()
     return render(request,'chat/msgcol.html',{"latestmessage":latestmessage,'m_id':m_id})
@@ -101,10 +101,10 @@ def evaluate(request, room_url):
     room_url2=int(room_url[x+1:])
     if room_url1>room_url2:
         r=str(room_url1)+"x"+str(room_url2)
-        return redirect('http://127.0.0.1:8000/chating/'+r)
+        return redirect('https://itschitchat.herokuapp.com/chating/'+r)
     else:
         r=str(room_url2)+"x"+str(room_url1)
-        return redirect('http://127.0.0.1:8000/chating/'+r)
+        return redirect('https://itschitchat.herokuapp.com/chating/'+r)
 
 def chat(request,username):
     users=User.objects.all()
