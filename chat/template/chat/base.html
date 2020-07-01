@@ -1,0 +1,175 @@
+{% load pwa %}
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<style media="screen">
+
+
+.imgcontainer {
+text-align: center;
+  margin: 24px 0 12px 0;
+  position: relative;
+    color: white;
+}
+.imgcontainer h1{
+  padding-left: 4%;
+}
+img.avatar {
+  width: 20%;
+  border-radius: 50%;
+}
+
+.container {
+  padding: 26px;
+  text-align: center;
+  font-size: 20px;
+}
+
+span.psw {
+  float: right;
+  padding-top: 16px;
+}
+
+.modal {
+  display: none;
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  top: 800px;
+  width: 30%;
+  height: 80%;
+
+  background-color: rgb(0,0,0);
+  background-color: rgba(0,0,0,0.4);
+  padding-top: 60px;
+}
+
+
+.animate {
+  -webkit-animation: animatezoom 0.6s;
+  animation: animatezoom 0.6s
+}
+
+@-webkit-keyframes animatezoom {
+  from {-webkit-transform: scale(0)}
+  to {-webkit-transform: scale(1)}
+}
+
+@keyframes animatezoom {
+  from {transform: scale(0)}
+  to {transform: scale(1)}
+}
+
+@media screen and (max-width: 300px) {
+  span.psw {
+     display: block;
+     float: none;
+  }
+  .example-1{
+    display: block;
+    float: none;
+    width: 80%;
+    height: 50%;
+  }}
+  @media only screen
+and (min-width : 1224px) {
+
+    .example-1{
+      display: block;
+      float: none;
+      width: 30%;
+      height: 80%;
+    }
+}
+
+
+</style>
+  <head>
+    {% progressive_web_app_meta %}
+    <!-- <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel='icon' href='/static/images/icon-192x192.png'>
+    <title></title>
+  </head>
+  <link href="{% static 'css/style.css' %}" rel="stylesheet">
+  <body>
+
+
+
+    <section id="cover">
+
+      <div class="container">
+        <a href="#about" class="button_style">GET STARTED</a>
+        <!-- <button type="button" class="button_style" name="button">Get Started</button> -->
+      </div>
+    </section>
+<br>
+<section id="about">
+<div class="heading">
+  <hr>
+  <h1>ABOUT</h1>
+<hr>
+</div>
+
+<div class="content">
+  Getting bored? Want to say something?
+  Don't call just chit chat!!
+<br>  <br>
+<div id="SignupCard">
+<a href="register" class="button_style container">SIGN UP</a>
+<a href="login" class="button_style container">LOGIN</a>
+</div>
+<br>
+A messaging site where you can safely chat with your friends. <br> Your messages will be encrypted so there can be no data leak.
+<br>Make your account and get started!!
+<br>It's free, relaible and fast so get started.
+
+</div>
+</section>
+<br><br>
+<section id="team">
+  <div class="heading">
+<hr>
+    <h1>TEAM</h1>
+    <hr>
+  </div>
+  <br>
+<div class="row">
+  <div class="column">
+<a href="https://priyanshu59.herokuapp.com/">  <div class="card">
+      <br>
+      <img src="{% static 'priyanshu.jpg' %}" alt="">
+      <h3>Priyanshu Arora</h3>
+      <p>Full-stack Developer</p>
+
+    </div>
+    </a>
+  </div>
+
+  <div class="column">
+<a href="https://knowrajatmore.web.app/">    <div class="card">
+<br>
+      <img src="{% static 'rajat.jpg' %}" alt="">
+      <h3><b>Rajat Shrivastava</b></h3>
+      <p>Full-stack Developer</p>
+
+    </div>
+    </a>
+  </div>
+
+
+</div>
+
+</section>
+<br><br>
+
+    </div>
+<br> <br><br><br>
+  </body>
+<section id='footer'>
+  <h3> &copy; Copyright 2020 ChitChat. </h3>
+
+</section>
+
+</html>

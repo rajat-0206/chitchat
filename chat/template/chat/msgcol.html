@@ -1,0 +1,22 @@
+{% for last in latestmessage %}
+<a href="{{last.cus_id}}">
+{% ifequal last.flag m_id %}
+    <li class="contact white" onclick='changecol(this)'>
+{% else %}
+<li class="contact" onclick="changecol(this)">
+{% endifequal %}
+    <div class="wrap">
+        {% ifequal last.flag m_id %}
+        <span class="contact-status online"></span>
+        {% endifequal %}
+        <img src="{{last.pic_url}}" alt="" />
+        <div class="meta">
+            <!-- <p class="name">{{Reciever}}</p> -->
+<p class="name">{{last.fid}}</p>
+
+            <!-- <p class="preview">{{message_save_var.text}}</p> -->
+        </div>
+</div>
+</li>
+</a>
+{% endfor %}

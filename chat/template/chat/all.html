@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    {% for user in users %}
+    <div class="show" style={background-color:"grey";}>
+
+    <a href="{{user.id}}x{{logged.id}}">{{user.first_name}}{{user.last_name}}({{user.username}})</a>
+
+        </div>
+        {% endfor %}
+  </body>
+</html>

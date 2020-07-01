@@ -1,0 +1,648 @@
+{% load static %}
+{% load pwa %}
+
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!DOCTYPE html>
+<html>
+<head>
+
+  <link rel="manifest" href="/manifest.json">
+  <script>
+
+      if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.register('/serviceworker.js', {
+              scope: '.' // <--- THIS BIT IS REQUIRED
+          }).then(function (registration) {
+              // Registration was successful
+              console.log('django-progressive-web-app: ServiceWorker registration successful with scope: ', registration.scope);
+          }, function (err) {
+              // registration failed :(
+              console.log('django-progressive-web-app: ServiceWorker registration failed: ', err);
+          });
+      }
+  </script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="theme-color" content="#fff">
+  <link rel='icon' href='/static/images/icon-192x192.png'>
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,300' rel='stylesheet' type='text/css'>
+<title>Chat room</title>
+<link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css'><link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.2/css/font-awesome.min.css'>
+<link rel="stylesheet" href="{% static 'css/room.css' %}"></head>
+<body>
+
+<div id="frame">
+	<div id="sidepanel">
+		<div id="profile">
+			<div class="wrap">
+			<a href="{{me.pic.pic_url}}"><img id="profile-img" src="{{me.pic.pic_url}}" class="online" alt="" /></a>
+			<p><b id="nameofuser">{{Name}}</b></p>
+				<div id="status-options">
+					<ul>
+						<li id="status-online" class="active"><span class="status-circle"></span> <p>Online</p></li>
+						<li id="status-away"><span class="status-circle"></span> <p>Away</p></li>
+						<li id="status-busy"><span class="status-circle"></span> <p>Busy</p></li>
+						<li id="status-offline"><span class="status-circle"></span> <p>Offline</p></li>
+					</ul>
+				</div>
+			</div>
+    </div>
+		<div id="search" >
+			<label for=""><i class="fa fa-search" aria-hidden="true"></i></label>
+			<input type="text" id="mycontactInput" onkeyup="myFunction()" placeholder="Search for names..">
+		</div>
+		<div id="contacts">
+			<ul id="messagecolumn">
+        {% for last in latestmessage %}
+        <a href="{{last.cus_id}}">
+          {% ifequal last.flag m_id %}
+				<li class="contact white" onclick='changecol(this)'>
+          {% else %}
+          <li class="contact" onclick="changecol(this)">
+           {% endifequal %}
+					<div class="wrap">
+            {% ifequal last.flag m_id %}
+						<span class="contact-status online"></span>
+            {% endifequal %}
+						<img src="{{last.pic_url}}" alt="" />
+						<div class="meta">
+							<!-- <p class="name">{{Reciever}}</p> -->
+              <p class="name">{{last.fid}}</p>
+							<!-- <p class="preview">{{message_save_var.text}}</p> -->
+						</div>
+            </div>
+				</li>
+</a>
+{% endfor %}
+			</ul>
+    </div>
+
+		<div id="bottom-bar">
+      <button id="btnsearch"><i class="fa fa-search" aria-hidden="true"></i></button>
+			<button id="newmsg"><i class="fa fa-user-plus fa-fw" aria-hidden="true"></i> <span>Send new Message</span></button>
+      <button id="settings"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> <span>Settings</span></button>
+      <a href="/user_logout"><button id="logout" ><i class="fa fa-power-off" aria-hidden="true"></i> <span>Logout</span></button></a>
+		</div>
+	</div>
+	<div class="content">
+   {% block content %}
+
+    <!-- chat -->
+    <div id="chat">
+    <div class="contact-profile">
+      {% if recerror == 'f' %}
+    <a href="{{rec.pic.pic_url}}">  <img src="{{rec.pic.pic_url}}" alt="" /></a>
+      {% else %}
+      <img src="{{rec.pic_url}}" alt="" />
+      {% endif %}
+      <p>{{Reciever}}</p>
+  </div>
+  <div class="messages" id="message" style="user-select:none">
+  <ul id="chat-log">
+  {% for m in message_save_var %}
+  {% ifequal m.name me.username %}
+  <li class="replies"><p>{{m.text}}<span class="rightalg">{{m.time}}</span></p></li>
+  {% else %}
+  <li class="sent"><p>{{m.text}} <span class="rightalg">{{m.time}}</span></p></li>
+  <!-- <p class="pname">{{m.name}}</p> -->
+  {% endifequal %}
+  {% endfor %}
+  </ul>
+  </div>
+  <div class="message-input">
+      <div class="wrap">
+      <input id="chat-message-input" type="text" placeholder="Write your message..." />
+      <button class="submit" id="chat-message-submit" type="button" value="Send"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+       {{ room_name|json_script:"room-name" }}
+
+      </div>
+  </div>
+  </div>
+  {% endblock %}
+   <!--new msg-->
+   <div id="newmsgdialog">
+    <span id="cross">&times;</span>
+    <div id="search">
+    <label for=""><i class="fa fa-search" aria-hidden="true"></i></label>
+    <input type="text" id="myInput" onkeyup="searchcontact()" placeholder="Search contacts..." />
+    </div>
+    <div id="contact list">
+      <ul id="contactcolumn">
+        {% for user in users %}
+        {% ifequal user.id logged.id %}
+          {%else %}
+        <a href="/{{user.id}}x{{logged.id}}">
+          <li class="contact" onclick="changecol(this)">
+          <div class="wrap">
+            <img src="{{user.pic.pic_url}}" alt="" />
+            <div class="meta">
+              <!-- <p class="name">{{Reciever}}</p> -->
+              <p class="name">{{user.first_name}} {{user.last_name}} ({{user.username}})</p>
+              <!-- <p class="preview">{{message_save_var.text}}</p> -->
+            </div>
+            </div>
+        </li>
+</a>
+{% endifequal %}
+{% endfor %}
+</ul>
+</div>
+    </div>
+
+<!--setting-->
+<div id="settingdialog">
+  <span id="scross">&times;</span>
+    <ul id="contactul">
+      <li class="contact" onclick="document.getElementById('id01').style.display='block'"> Change Name</li>
+      <a href="http://itschitchat.pythonanywhere.com/{{me.username}}"><li class="contact" > Change Profile Picture</li></a>
+      <li class="contact" onclick="document.getElementById('id02').style.display='block'">Delete Profile Picture</li>
+      <li class="contact" onclick="document.getElementById('id03').style.display='block'">Change Password</li>
+      <li class="contact" onclick="document.getElementById('id04').style.display='block'"> Delete Account</li>
+      </ul>
+      </div>
+    <!--search-->
+<div id="searchdialog">
+  <span id="searchcross">&times;</span>
+  <div id="search" >
+    <label for=""><i class="fa fa-search" aria-hidden="true"></i></label>
+    <input type="text" id="searchInput" onkeyup="searchmsg()" placeholder="Search for names..">
+  </div>
+  <div id="contacts">
+    <ul id="searchmsgcolumn">
+      {% for last in latestmessage %}
+      <a href="{{last.cus_id}}">
+        {% ifequal last.flag m_id %}
+      <li class="contact white" onclick='changecol(this)'>
+        {% else %}
+        <li class="contact" onclick="changecol(this)">
+         {% endifequal %}
+        <div class="wrap">
+          {% ifequal last.flag m_id %}
+          <span class="contact-status online"></span>
+          {% endifequal %}
+          <img src="{{last.pic_url}}" alt="" />
+          <div class="meta">
+            <!-- <p class="name">{{Reciever}}</p> -->
+            <p class="name">{{last.fid}}</p>
+            <!-- <p class="preview">{{message_save_var.text}}</p> -->
+          </div>
+          </div>
+      </li>
+</a>
+{% endfor %}
+    </ul>
+  </div>
+      </div>
+    </div>
+  </div>
+</div>
+  </div>
+
+  <div id="id01" class="w3-modal">
+    <div class="w3-modal-content w3-animate-zoom" style="width:40%;">
+
+      <header class="w3-container w3-teal" style="padding:10px">
+        <span onclick="document.getElementById('id01').style.display='none'"
+        class="w3-button w3-display-topright">&times;</span>
+        <h2>Change Name</h2>
+      </header>
+
+      <div class="w3-container" style="padding:10px">
+        <label>First Name</label>
+        <br>
+        <input class="w3-input" id="fname" type="text" style="border:1px solid #333;margin:5px; " placeholder="Enter first name">
+        <label>Last Name</label>
+        <br>
+        <input class="w3-input" id="lname" type="text" style="border:1px solid #333;margin:5px; " placeholder="Enter last name">
+      </div>
+
+      <footer class="w3-container w3-teal" style="padding:10px;">
+        <button class="w3-button w3-khaki" action='change_name' style="float:right " onclick="changename()">Submit</button>
+      </footer>
+
+    </div>
+  </div>
+
+  <div id="id02" class="w3-modal">
+    <div class="w3-modal-content w3-animate-zoom" style="width:40%;">
+
+      <header class="w3-container w3-teal" style="padding:10px">
+        <center>
+        <h1 style="font-weight: bolder; font-size: 24px;">Are You sure?</h1></center>
+      </header>
+      <footer class="w3-container w3-teal" style="padding:10px;">
+        <button class="w3-button w3-khaki" onclick="document.getElementById('id02').style.display='none'"  style="float:right; background-color: red; " >Cancel</button>
+        <a href="/del_dp"><button class="w3-button w3-khaki"  style="float:right; margin-right:5px;" >Yes</button></a>
+      </footer>
+
+    </div>
+  </div>
+
+  <!--Password -->
+  <!--Name change modal-->
+  <div id="id03" class="w3-modal">
+    <div class="w3-modal-content w3-animate-zoom" style="width:40%;">
+      <header class="w3-container w3-teal" style="padding:10px">
+        <span onclick="document.getElementById('id03').style.display='none'"
+        class="w3-button w3-display-topright">&times;</span>
+        <h2>Change Password<h2>
+      </header>
+      <div class="w3-container" style="padding:10px">
+        <label>Current Password</label>
+        <br>
+        <input class="w3-input" id="currentpass" type='password' style="border:1px solid #333;margin:5px; " placeholder="Enter current password">
+        <label>New Password</label>
+        <br>
+        <input class="w3-input" id="newpass" type="password" style="border:1px solid #333;margin:5px; " placeholder="Enter new password">
+        <label>Confirm Password</label>
+        <br>
+        <input class="w3-input normal" id="conpass" onkeyup="chkforpass()" type="password" style="margin:5px; " placeholder="Confirm new password">
+      </div>
+<style>
+  .normal{
+    border:1px solid #333;
+  }
+  .alert {
+    border:1px solid red;
+  }
+  .success{
+    border: 1px solid green;
+  }
+</style>
+<script>
+  function chkforpass(){
+    passw = document.getElementById('newpass').value;
+    conpwd = document.getElementById('conpass').value;
+    if(passw==conpwd)
+    {
+      document.getElementById('conpass').classList.remove('alert');
+      return true;
+    }
+    else{
+      document.getElementById('conpass').classList.add('alert');
+    }
+  }
+</script>
+      <footer class="w3-container w3-teal" style="padding:10px;">
+        <button class="w3-button w3-khaki"  style="float:right " onclick="changepass()">Submit</button>
+      </footer>
+
+    </div>
+  </div>
+
+  <div id="id04" class="w3-modal">
+    <div class="w3-modal-content w3-animate-zoom" style="width:40%;">
+
+      <header class="w3-container w3-teal" style="padding:10px">
+        <center>
+        <h1 style="font-weight: bolder; font-size: 24px;">Are You sure?</h1></center>
+      </header>
+      <footer class="w3-container w3-teal" style="padding:10px;">
+        <button class="w3-button w3-khaki" onclick="document.getElementById('id04').style.display='none'"  style="float:right; background-color: red; " >Cancel</button>
+        <a href="/delete_account"><button class="w3-button w3-khaki"  style="float:right; margin-right:5px;" >Yes</button></a>
+      </footer>
+
+    </div>
+  </div>
+  <div id="snackBar" class="snackbar snack-show">
+    <span class="snackText" id="snackText"></span>
+    <button class="snack-button" id="snackButton"></button>
+</div>
+<script>
+
+var hide = 'none',show = 'block';
+class Snackbar{
+    id = 'snackBar';
+    textId = 'snackText';
+    buttonId = 'snackButton';
+    normalSnack = 'snack-normal';
+    warningSnack = 'snack-warning';
+    errorSnack = 'snack-error';
+    showSnack = 'snack-show';
+    hideSnack = 'snack-hide';
+    //You can modify the following values for color codes of the three snackbar backgrounds.
+    normalBack = '#216bd3';
+    warnBack = '#aa8800';
+    errBack = '#c41010';
+
+    constructor(){
+        this.bar = document.getElementById(this.id);
+        this.text = document.getElementById(this.textId);
+        this.button = document.getElementById(this.buttonId);
+    }
+}
+
+/**
+ * Call this function whenever you want to display a snackbar message, customizing with following params.
+ * @param {*} text The text to be displayed as snackbar message.
+ * @param {*} hasAction If the snackbar has an associated action button, set this as true. Default is false.
+ * @param {*} actionText Set text on action button, if hasAction is true.
+ * @param {*} isNormal If set as true (default), a normal style snackbar UI will be created. Error style UI will be created if false.
+ * @param {*} isWarning If set as true, a warning style (moderate error) snackbar UI will be created. Default is false.
+ */
+function showSnackBar(text = String(),hasAction = false,actionText = String(),isNormal = true,isWarning = false){
+    var snack = new Snackbar();
+    snack.text.textContent = text;
+    if(hasAction){
+        snack.button.textContent = actionText;
+        snack.button.style.display = show;
+    } else {
+        snack.button.style.display = hide;
+    }
+    if(isNormal){
+        replaceClasses(snack.bar,Array(snack.warningSnack,snack.normalSnack,snack.errorSnack),snack.normalSnack);
+        snack.bar.style.backgroundColor = snack.normalBack;
+    } else {
+        if(isWarning){
+            replaceClasses(snack.bar,Array(snack.warningSnack,snack.normalSnack,snack.errorSnack),snack.warningSnack);
+            snack.bar.style.backgroundColor = snack.warnBack;
+        } else {
+            replaceClasses(snack.bar,Array(snack.warningSnack,snack.normalSnack,snack.errorSnack),snack.errorSnack);
+            snack.bar.style.backgroundColor = snack.errBack;
+        }
+
+
+    }
+    snack.bar.classList.replace(snack.hideSnack,snack.showSnack);
+    snack.bar.style.display = show;
+    setInterval(function(){
+        hideSnackBar();
+    },2000);
+}
+
+function replaceClasses(element,remove,set){
+    for(var k in remove){
+        element.classList.remove(k);
+    }
+    element.classList.add(set);
+}
+
+/**
+ * This method hides the current snackbar upon call.
+ */
+function hideSnackBar(){
+    var snack = new Snackbar();
+    replaceClasses(snack.bar,Array(snack.warningSnack,snack.normalSnack,snack.errorSnack),snack.normalSnack);
+    snack.bar.classList.replace(snack.showSnack,snack.hideSnack);
+    snack.bar.style.display = hide;
+}
+</script>
+<!--Room.html scripts-->
+   <script>
+     function changecolor(id)
+     {
+      id.style.background("background: #2c3e50");
+     }
+     setInterval(function(){
+       if(navigator.onLine)
+       {
+      var xhttp = new XMLHttpRequest();
+      var url = "room_name="+"{{room_name}}"+"&csrfmiddlewaretoken="+"{{csrf_token}}";
+    xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+          document.getElementById('messagecolumn').innerHTML = this.responseText;
+          myFunction();
+      };
+    }
+  xhttp.open("POST","/latest", true);
+  xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  xhttp.send(url);
+       }
+  else{
+    alert('You are offline!😞 Check your internet connection and refresh the page.');
+  }
+     },2000);
+
+          const roomName = JSON.parse(document.getElementById('room-name').textContent);
+
+        const chatSocket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/chat/'
+            + roomName
+            + '/'
+        );
+
+        chatSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            //document.querySelector('#chat-log').value += (data.message + '\n');
+            console.log(data.date+" "+data.time);
+
+            if(data.name=='{{me.username}}')
+            {
+            ul = document.getElementById("chat-log");
+            var li = document.createElement("li");
+            li.classList.add("replies");
+            var x = document.createElement('P');
+            var y = document.createElement('SPAN');
+            y.classList.add('rightalg');
+            y.appendChild(document.createTextNode(data.time));
+            x.appendChild(document.createTextNode(data.message));
+            x.appendChild(y);
+            li.appendChild(x);
+            ul.appendChild(li);
+            }
+            else{
+              ul = document.getElementById("chat-log");
+            var li = document.createElement("li");
+            li.classList.add("sent");
+            var x = document.createElement('P');
+            var y = document.createElement('SPAN');
+            y.classList.add('rightalg');
+            y.appendChild(document.createTextNode(data.time));
+            x.appendChild(document.createTextNode(data.message));
+            x.appendChild(y);
+            li.appendChild(x);
+            ul.appendChild(li);
+            }
+
+            var t=document.getElementById("message");
+            t.scrollTop=t.scrollHeight;
+        };
+
+        chatSocket.onclose = function(e) {
+            console.error('Chat socket closed unexpectedly');
+        };
+
+        document.querySelector('#chat-message-input').focus();
+        document.querySelector('#chat-message-input').onkeyup = function(e) {
+            if (e.keyCode === 13) {  // enter, return
+                document.querySelector('#chat-message-submit').click();
+            }
+        };
+
+        document.querySelector('#chat-message-submit').onclick = function(e) {
+            const messageInputDom = document.querySelector('#chat-message-input');
+            const message = messageInputDom.value;
+            chatSocket.send(JSON.stringify({
+                'message': message,
+                'name' :"{{me.username}}"
+            }));
+            messageInputDom.value = '';
+        };
+    </script>
+    <script type="text/javascript">
+    cls = document.getElementById("cross");
+    msgdialog = document.getElementById("newmsgdialog");
+    cls.onclick = function(){
+      msgdialog.style.display = 'none';
+      document.getElementById("chat").style.display="block";
+
+    }
+    newmsg = document.getElementById("newmsg");
+    newmsg.onclick = function(){
+      document.getElementById("chat").style.display="none";
+      msgdialog.style.display = 'block';
+    }
+
+    settingbut = document.getElementById('settings');
+settingmol = document.getElementById('settingdialog');
+settingcro = document.getElementById('scross');
+settingbut.onclick = function(){
+document.getElementById("chat").style.display="none";
+settingmol.style.display="block";
+}
+
+settingcro.onclick = function(){
+settingmol.style.display="none";
+document.getElementById("chat").style.display="block";
+}
+
+searchbut = document.getElementById('btnsearch');
+searchmol = document.getElementById('searchdialog');
+searchcro = document.getElementById('searchcross');
+searchbut.onclick = function(){
+document.getElementById("chat").style.display="none";
+searchmol.style.display="block";
+}
+
+searchcro.onclick = function(){
+searchmol.style.display="none";
+document.getElementById("chat").style.display="block";
+}
+    var t=document.getElementById("message");
+    t.scrollTop=t.scrollHeight;
+    </script>
+     <script>
+      function myFunction() {
+  // Declare variables
+  var input, filter, ul, li, a, i, txtValue;
+  input = document.getElementById('mycontactInput');
+  filter = input.value.toUpperCase();
+  ul = document.getElementById("messagecolumn");
+  a = ul.getElementsByTagName('a');
+
+  // Loop through all list items, and hide those who don't match the search query
+  for (i = 0; i < a.length; i++) {
+    P = a[i].getElementsByTagName("P")[0];
+    txtValue = P.textContent || P.innerText;
+    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+      a[i].style.display = "";
+    } else {
+    a[i].style.display = "none";
+    }
+  }
+}
+
+function searchmsg() {
+  // Declare variables
+  var input, filter, ul, li, a, i, txtValue;
+  input = document.getElementById('searchInput');
+  filter = input.value.toUpperCase();
+  ul = document.getElementById("searchmsgcolumn");
+  a = ul.getElementsByTagName('a');
+
+  // Loop through all list items, and hide those who don't match the search query
+  for (i = 0; i < a.length; i++) {
+    P = a[i].getElementsByTagName("P")[0];
+    txtValue = P.textContent || P.innerText;
+    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+      a[i].style.display = "";
+    } else {
+    a[i].style.display = "none";
+    }
+  }
+}
+
+function searchcontact() {
+// Declare variables
+var input, filter, ul, li, a, i, txtValue;
+input = document.getElementById('myInput');
+filter = input.value.toUpperCase();
+ul = document.getElementById("contactcolumn");
+a = ul.getElementsByTagName('a');
+
+// Loop through all list items, and hide those who don't match the search query
+for (i = 0; i < a.length; i++) {
+P = a[i].getElementsByTagName("P")[0];
+txtValue = P.textContent || P.innerText;
+if (txtValue.toUpperCase().indexOf(filter) > -1) {
+  a[i].style.display = "";
+} else {
+a[i].style.display = "none";
+}
+}
+}
+</script>
+<script>
+  function changename() {
+  fname = document.getElementById("fname").value;
+  lname = document.getElementById('lname').value;
+  var letters = /^[A-Za-z]+$/;
+   if(fname=="" || !fname.match(letters) || !lname.match(letters) )
+   {
+    showSnackBar(text ='Invalid Name',hasAction = false,actionText = String(),isNormal = true,isWarning = true);
+
+   }
+   else{
+    fname = fname[0].toUpperCase()+fname.slice(1);
+  lname = lname[0].toUpperCase()+lname.slice(1);
+  showSnackBar(text ='Changing Name...',hasAction = false,actionText = String(),isNormal = true,isWarning = false);
+  document.getElementById('id01').style.display="none";
+  var xhttp = new XMLHttpRequest();
+      var url = "first="+fname+"&last="+lname+"&csrfmiddlewaretoken="+"{{csrf_token}}";
+    xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      showSnackBar(text =this.responseText,hasAction = false,actionText = String(),isNormal = true,isWarning = false);
+            document.getElementById('nameofuser').innerHTML = fname+" "+lname;
+      };
+    }
+  xhttp.open("POST","/change_name", true);
+  xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  xhttp.send(url);
+   }
+}
+function changepass() {
+  current = document.getElementById("currentpass").value;
+  newone = document.getElementById('newpass').value;
+  if(current=="" || newone=="")
+  {
+    showSnackBar(text ='Please fill the relevant fields...',hasAction = false,actionText = String(),isNormal = false,isWarning = true);
+  }
+  else{
+ if(chkforpass()){
+
+  showSnackBar(text ='Changing Password...',hasAction = false,actionText = String(),isNormal = true,isWarning = false);
+  document.getElementById('id03').style.display="none";
+  var xhttp = new XMLHttpRequest();
+      var url = "current="+current+"&newone="+newone+"&csrfmiddlewaretoken="+"{{csrf_token}}";
+    xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      showSnackBar(text =this.responseText,hasAction = false,actionText = String(),isNormal = true,isWarning = false);
+
+      };
+    }
+  xhttp.open("POST","/change_pass", true);
+  xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  xhttp.send(url);
+   }
+  else{
+    showSnackBar(text ='Confirm Password did not matched...',hasAction = false,actionText = String(),isNormal = false,isWarning = true);
+  }
+}
+}
+</script>
+</body></html>
