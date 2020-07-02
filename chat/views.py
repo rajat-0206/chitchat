@@ -205,24 +205,24 @@ def delete_account(request):
 def update_dp(request, url):
     user=User.objects.get(username=request.session['username'])
     dp=pic.objects.get(user_id=user.id)
-    dp.pic_url="http://itschitchat.pythonanywhere.com/media/media/"+url
+    dp.pic_url="https://itschitchat.pythonanywhere.com/media/media/"+url
     dp.save()
     # name = user.first_name +" "+user.last_name
     last=lastmessage.objects.filter(f_id=user.id)
     for l in last:
-        l.pic_url="http://itschitchat.pythonanywhere.com/media/media/"+url
+        l.pic_url="https://itschitchat.pythonanywhere.com/media/media/"+url
         l.save()
     return redirect("/")
 
 def del_dp(request):
     user=User.objects.get(username=request.session['username'])
     dp=pic.objects.get(user_id=user.id)
-    dp.pic_url="http://itschitchat.pythonanywhere.com/media/media/default.png"
+    dp.pic_url="https://itschitchat.pythonanywhere.com/media/media/default.png"
     dp.save()
     # name = user.first_name +" "+user.last_name
     last=lastmessage.objects.filter(f_id=user.id)
     for l in last:
-        l.pic_url="http://itschitchat.pythonanywhere.com/media/media/default.png"
+        l.pic_url="https://itschitchat.pythonanywhere.com/media/media/default.png"
         l.save()
     return redirect("/")
 def change_pass(request):
@@ -240,5 +240,5 @@ def change_pass(request):
         return HttpResponse("Password Changed Succesfully")
     else:
         return HttpResponse("Password does not macth")
-# http://itschitchat.pythonanywhere.com/media/media/default.png
+# https://itschitchat.pythonanywhere.com/media/media/default.png
 # default
