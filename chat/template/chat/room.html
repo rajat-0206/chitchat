@@ -134,7 +134,7 @@
         {% for user in users %}
         {% ifequal user.id logged.id %}
           {%else %}
-        <a href="eval/{{user.id}}x{{logged.id}}">
+        <a href="/eval/{{user.id}}x{{logged.id}}">
           <li class="contact" onclick="changecol(this)">
           <div class="wrap">
             <img src="{{user.pic.pic_url}}" alt="" />
