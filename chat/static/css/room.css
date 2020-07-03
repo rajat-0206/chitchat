@@ -1,9 +1,9 @@
 body {
-  display: flex;
+  /* display: flex; */
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background:url("/static/chatbg.jpg") top center;
+  background-color: white;
   font-family: "proxima-nova", "Source Sans Pro", sans-serif;
   font-size: 1em;
   letter-spacing: 0.1px;
@@ -15,7 +15,7 @@ body {
 
 a {
   text-decoration: none;
-  
+
 }
 a:hover{
   color:inherit;
@@ -24,10 +24,10 @@ a:hover{
 #frame {
   width: 100%;
   min-width: 360px;
-  max-width: 1000px;
-  height: 92vh;
-  min-height: 300px;
-  max-height: 720px;
+  /* max-width: 1000px; */
+  /* height: 92vh; */
+  /* min-height: 300px; */
+  /* max-height: 720px; */
   background: #E6EAEA;
 }
 
@@ -36,7 +36,7 @@ a:hover{
   padding:5px;
   border-radius :5px;
 
-  
+
 } */
 
 #logout a:hover {
@@ -1059,7 +1059,7 @@ a:hover{
           animation:animatebottom 0.4s ease;
           animation-fill-mode: forwards;
       }
-      @keyframes 
+      @keyframes
       animatebottom{
           from{bottom:0;opacity:1}
           to{bottom:-300px;opacity:0;display:none;}

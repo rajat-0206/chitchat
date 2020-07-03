@@ -242,3 +242,49 @@ def change_pass(request):
         return HttpResponse("Password does not macth")
 # https://itschitchat.pythonanywhere.com/media/media/default.png
 # default
+def show_message(request):
+    r=request.POST.get("room_name")
+    username = request.session['username']
+    user = User.objects.get(username=username)
+    message_save_var=message_save.objects.filter(cus_id=r)
+    return render(request,'chat/show_message.html',{"message_save_var":message_save_var,"me":user})
+
+
+def save_message(request):
+        c_id_in=request.POST.get("room_name")
+        message=request.POST.get("message")
+        naam=request.POST.get("name")
+        time=request.POST.get("time")
+        m=message_save.objects.create(text=message,cus_id=c_id_in,name=naam,time=time)
+        m.save()
+        x=c_id_in.index("x")
+        room_name1=int(c_id_in[0:x])
+        room_name2=int(c_id_in[x+1:])
+        name_by_id1=User.objects.get(id=room_name1)
+        name_by_id2=User.objects.get(id=room_name2)
+        name1=name_by_id1.first_name+" "+name_by_id1.last_name
+        u_name1=name_by_id1.username
+        name2=name_by_id2.first_name+" "+name_by_id2.last_name
+        u_name2=name_by_id2.username
+        if naam==name1:
+            m_id1=name_by_id1.id
+        else:
+            m_id1=name_by_id1.id
+        if naam==name2:
+            m_id2=name_by_id2.id
+        else:
+            m_id2=name_by_id2.id
+        try:
+            row=lastmessage.objects.filter(cus_id="https://itschitchat.herokuapp.com/chating/"+c_id_in)
+            for x in row:
+                x.delete()
+            new=lastmessage.objects.create(myid=name1,fid=name2,cus_id="https://itschitchat.herokuapp.com/chating/"+c_id_in,Uname=u_name1,flag=m_id1,f_id=m_id2,pic_url=pic.objects.get(user_id=m_id2).pic_url)
+            new.save()
+            new=lastmessage.objects.create(myid=name2,fid=name1,cus_id='https://itschitchat.herokuapp.com/chating/'+c_id_in,Uname=u_name2,flag=m_id2,f_id=m_id1,pic_url=pic.objects.get(user_id=m_id1).pic_url)
+            new.save()
+        except Exception:
+            new=lastmessage.objects.create(myid=name1,fid=name2,cus_id="https://itschitchat.herokuapp.com/chating/"+c_id_in,Uname=u_name1,f_id=m_id2,pic_url=pic.objects.get(user_id=m_id2).pic_url)
+            new.save()
+            new=lastmessage.objects.create(myid=name2,fid=name1,cus_id='https://itschitchat.herokuapp.com/chating/'+c_id_in,Uname=u_name2,f_id=m_id1,pic_url=pic.objects.get(user_id=m_id1).pic_url)
+            new.save()
+        return HttpResponse("Sent")

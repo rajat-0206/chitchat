@@ -1,6 +1,6 @@
 {% load static %}
 {% load pwa %}
-<!-- <script src="{% static 'script/reconnecting-websocket.min.js' %}"></script> -->
+
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -28,7 +28,6 @@
   <meta name="theme-color" content="#fff">
   <link rel='icon' href='/static/images/icon-192x192.png'>
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-  
 <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,300' rel='stylesheet' type='text/css'>
 <title>Chat room</title>
 <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css'><link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.2/css/font-awesome.min.css'>
@@ -135,7 +134,7 @@
         {% for user in users %}
         {% ifequal user.id logged.id %}
           {%else %}
-        <a href="/{{user.id}}x{{logged.id}}">
+        <a href="eval/{{user.id}}x{{logged.id}}">
           <li class="contact" onclick="changecol(this)">
           <div class="wrap">
             <img src="{{user.pic.pic_url}}" alt="" />
@@ -417,58 +416,59 @@ function hideSnackBar(){
   }
      },2000);
 
+     setInterval(function(){
+      var xhttp = new XMLHttpRequest();
+      var url = "room_name="+"{{room_name}}"+"&csrfmiddlewaretoken="+"{{csrf_token}}";
+    xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+          document.getElementById('chat-log').innerHTML = this.responseText;
+          var t=document.getElementById("message");
+            t.scrollTop=t.scrollHeight;
+      };
+    }
+  xhttp.open("POST","/show_message", true);
+  xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  xhttp.send(url);
+     },2000);
+
           const roomName = JSON.parse(document.getElementById('room-name').textContent);
 
-          var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
-                  const chatSocket = new WebSocket(
-                      ws_scheme+
-                      '://'
-                      + window.location.host
-                      + '/chat/'
-                      + roomName
-                      + '/'
-                  );
 
-        chatSocket.onmessage = function(e) {
-            const data = JSON.parse(e.data);
-            //document.querySelector('#chat-log').value += (data.message + '\n');
-            console.log(data.date+" "+data.time);
+        // chatSocket.onmessage = function(e) {
+        //     const data = JSON.parse(e.data);
+        //     //document.querySelector('#chat-log').value += (data.message + '\n');
+        //     console.log(data.date+" "+data.time);
 
-            if(data.name=='{{me.username}}')
-            {
-            ul = document.getElementById("chat-log");
-            var li = document.createElement("li");
-            li.classList.add("replies");
-            var x = document.createElement('P');
-            var y = document.createElement('SPAN');
-            y.classList.add('rightalg');
-            y.appendChild(document.createTextNode(data.time));
-            x.appendChild(document.createTextNode(data.message));
-            x.appendChild(y);
-            li.appendChild(x);
-            ul.appendChild(li);
-            }
-            else{
-              ul = document.getElementById("chat-log");
-            var li = document.createElement("li");
-            li.classList.add("sent");
-            var x = document.createElement('P');
-            var y = document.createElement('SPAN');
-            y.classList.add('rightalg');
-            y.appendChild(document.createTextNode(data.time));
-            x.appendChild(document.createTextNode(data.message));
-            x.appendChild(y);
-            li.appendChild(x);
-            ul.appendChild(li);
-            }
+        //     if(data.name=='{{me.username}}')
+        //     {
+        //     ul = document.getElementById("chat-log");
+        //     var li = document.createElement("li");
+        //     li.classList.add("replies");
+        //     var x = document.createElement('P');
+        //     var y = document.createElement('SPAN');
+        //     y.classList.add('rightalg');
+        //     y.appendChild(document.createTextNode(data.time));
+        //     x.appendChild(document.createTextNode(data.message));
+        //     x.appendChild(y);
+        //     li.appendChild(x);
+        //     ul.appendChild(li);
+        //     }
+        //     else{
+        //       ul = document.getElementById("chat-log");
+        //     var li = document.createElement("li");
+        //     li.classList.add("sent");
+        //     var x = document.createElement('P');
+        //     var y = document.createElement('SPAN');
+        //     y.classList.add('rightalg');
+        //     y.appendChild(document.createTextNode(data.time));
+        //     x.appendChild(document.createTextNode(data.message));
+        //     x.appendChild(y);
+        //     li.appendChild(x);
+        //     ul.appendChild(li);
+        //     }
 
-            var t=document.getElementById("message");
-            t.scrollTop=t.scrollHeight;
-        };
 
-        chatSocket.onclose = function(e) {
-            console.error('Chat socket closed unexpectedly');
-        };
+        //};
 
         document.querySelector('#chat-message-input').focus();
         document.querySelector('#chat-message-input').onkeyup = function(e) {
@@ -480,12 +480,43 @@ function hideSnackBar(){
         document.querySelector('#chat-message-submit').onclick = function(e) {
             const messageInputDom = document.querySelector('#chat-message-input');
             const message = messageInputDom.value;
-            chatSocket.send(JSON.stringify({
-                'message': message,
-                'name' :"{{me.username}}"
-            }));
+            //document.querySelector('#chat-log').value += (data.message + '\n');
+            //console.log(data.date+" "+data.time);
+            var today = new Date();
+            var minute=today.getMinutes().toString();
+            if (minute.length==1){
+              minute="0"+minute;
+            }
+            var hour=today.getHours().toString();
+            if (hour.length==1){
+              hour="0"+hour;
+            }
+            var time = hour + ":" + minute ;
+            ul = document.getElementById("chat-log");
+            var li = document.createElement("li");
+            li.classList.add("replies");
+            var x = document.createElement('P');
+            var y = document.createElement('SPAN');
+            y.classList.add('rightalg');
+            y.appendChild(document.createTextNode(time));
+            x.appendChild(document.createTextNode(message));
+            x.appendChild(y);
+            li.appendChild(x);
+            ul.appendChild(li);
+            var xhttp = new XMLHttpRequest();
+            var url = "message="+message+"&name="+"{{me.username}}"+"&room_name="+roomName+"&time="+time+"&csrfmiddlewaretoken="+"{{csrf_token}}";
+            xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+              console.log(this.responseText);
+             };
+              }
+           xhttp.open("POST","/save_message", true);
+          xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhttp.send(url);
             messageInputDom.value = '';
-        };
+            var t=document.getElementById("message");
+            t.scrollTop=t.scrollHeight;
+        }
     </script>
     <script type="text/javascript">
     cls = document.getElementById("cross");

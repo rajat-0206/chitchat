@@ -7,7 +7,7 @@ from django.views.generic import TemplateView
 urlpatterns = [
     path('',views.home,name="home"),
     path('chating/<str:room_name>/', views.room, name='room'),
-    path('<str:room_url>/', views.evaluate, name='evaluate'),
+    path('eval/<str:room_url>/', views.evaluate, name='evaluate'),
     path('updated/<str:url>/', views.update_dp, name='update_dp'),
     path('login',views.login_page,name="login_page"),
     path('user_login',views.user_login,name="user_login"),
@@ -23,6 +23,8 @@ urlpatterns = [
     path('delete_account', views.delete_account, name="Account Deleted"),
     path('manifest.json',views.manifest,name="manifest"),
     path('offline.html',views.offline,name='offline'),
+    path('save_message',views.save_message,name='save_message'),
+    path('show_message',views.show_message,name='show_message'),
     path('serviceworker.js', (TemplateView.as_view(template_name="chat/serviceworker.js", content_type='application/javascript', )), name='sw.js'),
 
 
