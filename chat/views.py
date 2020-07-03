@@ -89,7 +89,6 @@ def latest(request):
     m_id=str(user.id)
     latestmessage=lastmessage.objects.filter(Uname=username)[::-1]
     for l in latestmessage:
-
         if l.cus_id=="https://itschitchat.herokuapp.com/chating/"+room_name :
             l.flag='y'
             l.save()
