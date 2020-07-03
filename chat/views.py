@@ -245,7 +245,8 @@ def show_message(request):
     r=request.POST.get("room_name")
     username = request.session['username']
     user = User.objects.get(username=username)
-    message_save_var=message_save.objects.filter(cus_id=r)
+    # message_save_var=message_save.objects.filter(cus_id=r)
+    message_save_var=message_save.objects.filter(cus_id=r).order_by('id')
     return render(request,'chat/show_message.html',{"message_save_var":message_save_var,"me":user})
 
 
