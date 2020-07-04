@@ -1,3 +1,4 @@
+importScripts('https://cdn.onesignal.com/sdks/OneSignalSDKWorker.js');
 var CACHE_NAME = 'chitchat-cache-v1';
 var urlsToCache = [
   '/offline.html',
