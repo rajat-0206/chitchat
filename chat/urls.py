@@ -26,7 +26,5 @@ urlpatterns = [
     path('save_message',views.save_message,name='save_message'),
     path('show_message',views.show_message,name='show_message'),
     path('serviceworker.js', (TemplateView.as_view(template_name="chat/serviceworker.js", content_type='application/javascript', )), name='sw.js'),
-    path('OneSignalSDKUpdaterWorker.js', (TemplateView.as_view(template_name="chat/OneSignalSDKUpdaterWorker.js", content_type='application/javascript', )), name='OneSignalSDKUpdaterWorker.js'),
-    path('OneSignalSDKWorker.js', (TemplateView.as_view(template_name="chat/OneSignalUpdaterWorker.js", content_type='application/javascript', )), name='OneSignalWorker.js'),
 
 ]
