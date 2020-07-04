@@ -145,7 +145,7 @@ def user_login(request):
             print("Username: {} and password {}".format(username,password))
             return render(request,'chat/login.html',{'error1':error1})
     else:
-        HttpResponse("You don't have access to this url")
+        return HttpResponse("You don't have access to this url")
 
 def register(request):
     form = SignUpForm()

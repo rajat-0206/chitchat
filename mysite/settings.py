@@ -56,7 +56,6 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'mysite.urls'
 
-PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, 'chat/static/script', 'serviceworker.js')
 
 TEMPLATES = [
     {
