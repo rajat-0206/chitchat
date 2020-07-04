@@ -429,7 +429,7 @@ function hideSnackBar(){
   xhttp.open("POST","/show_message", true);
   xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   xhttp.send(url);
-     },2000);
+},1000);
 
           const roomName = JSON.parse(document.getElementById('room-name').textContent);
 

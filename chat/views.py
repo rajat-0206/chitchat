@@ -71,8 +71,8 @@ def room(request, room_name):
     else:
         r=str(room_2)+"x"+str(room_name1)
 
-    message_save_var=message_save.objects.filter(cus_id=r)
-    latestmessage=lastmessage.objects.filter(Uname=username)[::-1]
+    message_save_var=message_save.objects.filter(cus_id=r).order_by('id')
+    latestmessage=lastmessage.objects.filter(Uname=username).order_by('id')[::-1]
 
     for l in latestmessage:
 
