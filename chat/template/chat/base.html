@@ -90,6 +90,33 @@ and (min-width : 1224px) {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel='icon' href='/static/images/icon-192x192.png'>
+    <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
+<script>
+window.onload =  setTimeout( function(){
+  Notification.requestPermission().then((permission) => {
+    if (permission === 'granted') {
+      console.log('Notification permission granted.');
+
+    } else {
+      console.log('Unable to get permission to notify.');
+    }
+  });
+    }  , 2000 );
+  var OneSignal = window.OneSignal || [];
+  OneSignal.push(function() {
+    OneSignal.init({
+      appId: "56f464d8-5f40-479c-b005-7bbc1dff146d",
+      promptOptions: {
+        slidedown: {
+          enabled: true,
+          autoPrompt: true,
+          timeDelay: 5,
+          pageViews: 1
+        }
+      }
+    });
+  });
+</script>
     <title></title>
   </head>
   <link href="{% static 'css/style.css' %}" rel="stylesheet">
