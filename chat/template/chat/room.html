@@ -9,7 +9,26 @@
 <head>
 
   <link rel="manifest" href="/manifest.json">
+  <script>
+
+      if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.register('/serviceworker.js', {
+              scope: '.' // <--- THIS BIT IS REQUIRED
+          }).then(function (registration) {
+              // Registration was successful
+              console.log('django-progressive-web-app: ServiceWorker registration successful with scope: ', registration.scope);
+          }, function (err) {
+              // registration failed :(
+              console.log('django-progressive-web-app: ServiceWorker registration failed: ', err);
+          });
+      }
+
+
+  </script>
+
   <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
+
+
 <script>
   window.onload =  setTimeout( function(){
     Notification.requestPermission().then((permission) => {
@@ -21,7 +40,8 @@
       }
     });
       }  , 2000 );
-  window.OneSignal = window.OneSignal || [];
+
+window.OneSignal = window.OneSignal || [];
   let myCustomUniqueUserId = "{{me.username}}";
   var OneSignal = window.OneSignal || [];
   OneSignal.push(function() {
@@ -39,22 +59,7 @@
     OneSignal.setExternalUserId(myCustomUniqueUserId);
   });
 </script>
-  <script>
 
-      if ('serviceWorker' in navigator) {
-          navigator.serviceWorker.register('/serviceworker.js', {
-              scope: '.' // <--- THIS BIT IS REQUIRED
-          }).then(function (registration) {
-              // Registration was successful
-              console.log('django-progressive-web-app: ServiceWorker registration successful with scope: ', registration.scope);
-          }, function (err) {
-              // registration failed :(
-              console.log('django-progressive-web-app: ServiceWorker registration failed: ', err);
-          });
-      }
-
-
-  </script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="theme-color" content="#fff">

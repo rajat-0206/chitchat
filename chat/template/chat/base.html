@@ -85,12 +85,31 @@ and (min-width : 1224px) {
 
 </style>
   <head>
-    {% progressive_web_app_meta %}
+    <!-- {% progressive_web_app_meta %} -->
     <!-- <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> -->
+      <link rel="manifest" href="/manifest.json">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel='icon' href='/static/images/icon-192x192.png'>
+    <script>
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/serviceworker.js', {
+                scope: '.' // <--- THIS BIT IS REQUIRED
+            }).then(function (registration) {
+                // Registration was successful
+                console.log('django-progressive-web-app: ServiceWorker registration successful with scope: ', registration.scope);
+            }, function (err) {
+                // registration failed :(
+                console.log('django-progressive-web-app: ServiceWorker registration failed: ', err);
+            });
+        }
+
+
+    </script>
+
     <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
+
 <script>
 window.onload =  setTimeout( function(){
   Notification.requestPermission().then((permission) => {
