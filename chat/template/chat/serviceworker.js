@@ -1,3 +1,4 @@
+importScripts('https://cdn.onesignal.com/sdks/OneSignalSDKWorker.js');
 var CACHE_NAME = 'chitchat-cache-v1';
 var urlsToCache = [
   '/offline.html',
@@ -43,7 +44,7 @@ self.addEventListener('fetch', (event) => {
         const networkResponse = await fetch(event.request);
         return networkResponse;
       } catch (error) {
-        
+
         console.log('Fetch failed; returning offline page instead.', error);
 
         const cache = await caches.open(CACHE_NAME);
