@@ -27,3 +27,6 @@ class lastmessage(models.Model):
 class pic(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     pic_url=models.CharField(max_length=500,default='https://itschitchat.pythonanywhere.com/media/media/default.png')
+class changePassword(models.Model):
+    token = models.CharField(max_length=500)
+    u_name=models.CharField(max_length=200)

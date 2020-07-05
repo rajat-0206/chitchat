@@ -21,7 +21,7 @@
 {% block style %}
 <style>
 body {font-family: Arial, Helvetica, sans-serif;
-  background:url(".././static/chatbg.jpg") top center;
+  background-color: #ffe6e6;
   color: black;
 
 }
@@ -195,21 +195,10 @@ border: 1px solid #888;
                   <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
               </div>
               <div class="scontainer">
-                  <div class="r">{{error1}}</div>
-                <form action=user_login method="post">
-                                {% csrf_token %}
-                                <label for="username">Username:</label><br>
-                                <input type="text" name="username" >
-                                <br>
+                  <div class="r">{{error}}</div>
+                  <br><br>
+                  <a href="https://itschitchat.herokuapp.com/login"> <button type="submit" class="btn btn-primary right" onclick="showloader()">Login</button></a>
 
-
-                                <label for="password">Password:</label><br>
-                                <input type="password" name="password" ><br>
-                                <br>
-                                <button type="submit" class="btn btn-primary right" onclick="showloader()">Login</button>
-                              <br>  <p style="font-size:15px; color: red; margin-top:10px;"> <a href="/password">Forgot Password?</a></p>
-
-                                </form>
                </div>
         </div>
 

@@ -6,7 +6,6 @@ from django.contrib.auth.models import User,auth
 from django.contrib.auth import login, authenticate,logout
 from .forms import SignUpForm
 from django.contrib.auth.hashers import check_password
-# from win10toast import ToastNotifier
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.hashers import check_password
 from .models import dp,lastmessage,pic
@@ -16,9 +15,11 @@ import requests
 import json
 import hashlib, binascii
 from django.contrib.sessions.models import Session
-
-from .models import message_save,lastmessage
-
+import smtplib, ssl
+from mysite.settings import EMAIL_HOST_USER
+from django.core.mail import send_mail
+from .models import message_save,lastmessage,changePassword
+import hashlib
 global logged
 
 
@@ -234,11 +235,6 @@ def change_pass(request):
     user=User.objects.get(username=request.session['username'])
     current= request.POST.get("current")
     password1= request.POST.get("newone")
-    # password2= request.POST.get("conpass")
-
-    # matchcheck= check_password(user.password, current)
-    # print(matchcheck)
-
     if authenticate(username=request.session['username'],password=current):
         user.set_password(password1)
         user.save()
@@ -305,7 +301,48 @@ def save_message(request):
         req = requests.post("https://onesignal.com/api/v1/notifications", headers=header, data=json.dumps(payload))
         print(req.status_code, req.reason,req.text,sep="----000----")
         return HttpResponse("Sent")
-def test(request):
-    # u=forgotpass.objects.create()
-    # u.save()
-    return HttpResponse("test")
+def enteremail(request):
+    email=request.POST.get('email')
+    s=User.objects.filter(email=email)
+    if s:
+        error=""
+    else:
+        error="No user with this email exists"
+    return render(request,'chat/account_confirm.html',{"acc":s,"error":error})
+def forgot(request):
+    return render(request,'chat/password_reset.html')
+
+def sendemail(request,name_pass):
+    subject = 'Change password for ChitChat'
+    hash_object = hashlib.md5(name_pass.encode())
+    sendlink=hash_object.hexdigest()
+    hashsave=changePassword.objects.create(token=sendlink,u_name=name_pass)
+    u=User.objects.get(username=name_pass)
+    messages = "Hi!!"+"\n"+"Here is the link to change your password"+"\n"+"https://itschitchat.herokuapp.com/passwordurl/"+sendlink
+    recepient =u.email
+    send_mail(subject,
+        messages, EMAIL_HOST_USER, [recepient])
+    error="Link to change password is sent to your mail."
+    return render(request ,'chat/error.html',{'error':error})
+
+def change_pass_confirm(request,url_token):
+    if request.method=='POST':
+        if changePassword.objects.get(token=url_token):
+            s=changePassword.objects.get(token=url_token)
+            name=s.u_name
+            user=User.objects.get(username=name)
+            password1= request.POST.get("pass1")
+            password2= request.POST.get("pass2")
+            if password1==password2 and len(password1)>=8:
+                user.set_password(password1)
+                user.save()
+                s.delete()
+                error="Password Changed Succesfully.Login to continue."
+                return render(request ,'chat/error.html',{'error':error})
+            else:
+                error="Either password is less than 8 digits or password did not match with confirm password"
+                return render(request,'chat/password_reset_form.html',{'url':url_token,'error':error})
+        else:
+            return HttpResponse("Sorry you can't access the page. Please contact admin")
+    else:
+        return render(request,'chat/password_reset_form.html',{'url':url_token})
