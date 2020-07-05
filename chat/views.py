@@ -22,8 +22,8 @@ from .models import message_save,lastmessage
 global logged
 
 def handle404(request,exception):
-    return render(request,"404.html")
-    
+    return render(request,"chat/404.html")
+
 def manifest(request):
     return render(request,'chat/manifest.json')
 
