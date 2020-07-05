@@ -12,6 +12,3 @@ urlpatterns = [
 
 ]
 
-handler404 = 'chat.views.handle404'
-
-handler500 = 'chat.views.handle500'
