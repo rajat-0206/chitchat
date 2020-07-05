@@ -4,10 +4,19 @@
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<link rel="stylesheet" href="{% static 'css/loader.css' %}">
 <!DOCTYPE html>
 <html>
 <head>
-
+  <script>
+    setInterval(() => {
+      document.getElementById('loaderbackground').style.display="none";
+    }, 2000);
+  
+    function showloader(){
+    document.getElementById("loaderbackground").style.display="block";
+  }
+  </script>
   <link rel="manifest" href="/manifest.json">
   <script>
 
@@ -70,7 +79,9 @@ window.OneSignal = window.OneSignal || [];
 <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css'><link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.2/css/font-awesome.min.css'>
 <link rel="stylesheet" href="{% static 'css/room.css' %}"></head>
 <body>
-
+  <div id="loaderbackground">
+    <div class="loading">Loading&#8230;</div>
+  </div>
 <div id="frame">
 	<div id="sidepanel">
 		<div id="profile">
@@ -96,7 +107,7 @@ window.OneSignal = window.OneSignal || [];
 		<div id="contacts">
 			<ul id="messagecolumn">
         {% for last in latestmessage %}
-        <a href="{{last.cus_id}}">
+        <a href="{{last.cus_id}}" onclick="showloader()">
           {% ifequal last.flag m_id %}
 				<li class="contact white" onclick='changecol(this)'>
           {% else %}
@@ -172,7 +183,7 @@ window.OneSignal = window.OneSignal || [];
         {% for user in users %}
         {% ifequal user.id logged.id %}
           {%else %}
-        <a href="/eval/{{user.id}}x{{logged.id}}">
+        <a href="/eval/{{user.id}}x{{logged.id}}" onclick="showloader()">
           <li class="contact" onclick="changecol(this)">
           <div class="wrap">
             <img src="{{user.pic.pic_url}}" alt="" />
@@ -211,7 +222,7 @@ window.OneSignal = window.OneSignal || [];
   <div id="contacts">
     <ul id="searchmsgcolumn">
       {% for last in latestmessage %}
-      <a href="{{last.cus_id}}">
+      <a href="{{last.cus_id}}" onclick="showloader()">
         {% ifequal last.flag m_id %}
       <li class="contact white" onclick='changecol(this)'>
         {% else %}

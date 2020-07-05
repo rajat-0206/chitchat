@@ -110,6 +110,7 @@ and (min-width : 1224px) {
 
 <script>
 window.onload =  setTimeout( function(){
+  document.getElementById('loaderbackground').style.display="none";
   Notification.requestPermission().then((permission) => {
     if (permission === 'granted') {
       console.log('Notification permission granted.');
@@ -133,36 +134,42 @@ window.onload =  setTimeout( function(){
       }
     });
   });
+
+  function showloader(){
+  document.getElementById("loaderbackground").style.display="block";
+}
 </script>
-    <title></title>
-  </head>
-  <link href="{% static 'css/style.css' %}" rel="stylesheet">
-  <body>
+<title>Chit Chat</title>
 
+</head>
+<link href="{% static 'css/style.css' %}" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/loader.css' %}">
+<body>
+  <div id="loaderbackground">
+    <div class="loading">Loading&#8230;</div>
+  </div>
+  <section id="cover">
 
+    <div class="container">
+      <a href="#about" class="button_style">GET STARTED</a>
 
-    <section id="cover">
-
-      <div class="container">
-        <a href="#about" class="button_style">GET STARTED</a>
-
-      </div>
-    </section>
+    </div>
+  </section>
 <br>
 <section id="about">
 <div class="heading">
-  <hr>
-  <h1>ABOUT</h1>
+<hr>
+<h1>ABOUT</h1>
 <hr>
 </div>
 
 <div class="content">
-  Getting bored? Want to say something?
-  Don't call just chit chat!!
+Getting bored? Want to say something?
+Don't call just chit chat!!
 <br>  <br>
 <div id="SignupCard">
-<a href="register" class="button_style container">SIGN UP</a>
-<a href="login" class="button_style container">LOGIN</a>
+<a href="register" class="button_style container" onclick="showloader()">SIGN UP</a>
+<a href="login" class="button_style container" onclick="showloader()">LOGIN</a>
 </div>
 <br>
 A messaging site where you can safely chat with your friends. <br> Your messages will be encrypted so there can be no data leak.
@@ -173,34 +180,34 @@ A messaging site where you can safely chat with your friends. <br> Your messages
 </section>
 <br><br>
 <section id="team">
-  <div class="heading">
+<div class="heading">
 <hr>
-    <h1>TEAM</h1>
-    <hr>
-  </div>
-  <br>
-<div class="row">
-  <div class="column">
-<a href="https://priyanshu59.herokuapp.com/">  <div class="card">
-      <br>
-      <img src="{% static 'priyanshu.jpg' %}" alt="">
-      <h3>Priyanshu Arora</h3>
-      <p>Full-stack Developer</p>
-
-    </div>
-    </a>
-  </div>
-
-  <div class="column">
-<a href="https://knowrajatmore.web.app/">    <div class="card">
+  <h1>TEAM</h1>
+  <hr>
+</div>
 <br>
-      <img src="{% static 'rajat.jpg' %}" alt="">
-      <h3><b>Rajat Shrivastava</b></h3>
-      <p>Full-stack Developer</p>
+<div class="row">
+<div class="column">
+<a href="https://priyanshu59.herokuapp.com/">  <div class="card" onclick="showloader()">
+    <br>
+    <img src="{% static 'priyanshu.jpg' %}" alt="">
+    <h3>Priyanshu Arora</h3>
+    <p>Full-stack Developer</p>
 
-    </div>
-    </a>
   </div>
+  </a>
+</div>
+
+<div class="column">
+<a href="https://knowrajatmore.web.app/" onclick="showloader()">    <div class="card">
+<br>
+    <img src="{% static 'rajat.jpg' %}" alt="">
+    <h3><b>Rajat Shrivastava</b></h3>
+    <p>Full-stack Developer</p>
+
+  </div>
+  </a>
+</div>
 
 
 </div>
@@ -208,11 +215,11 @@ A messaging site where you can safely chat with your friends. <br> Your messages
 </section>
 <br><br>
 
-    </div>
+  </div>
 <br> <br><br><br>
-  </body>
+</body>
 <section id='footer'>
-  <h3> &copy; Copyright 2020 ChitChat. </h3>
+<h3> &copy; Copyright 2020 ChitChat. </h3>
 
 </section>
 

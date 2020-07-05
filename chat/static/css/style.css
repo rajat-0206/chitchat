@@ -9,6 +9,14 @@ body {
 html {
   scroll-behavior: smooth;
 }
+
+::-webkit-scrollbar {
+  width: 8px;
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3);
+}
 a {
   color: #03C4EB;
   transition: 0.5s;

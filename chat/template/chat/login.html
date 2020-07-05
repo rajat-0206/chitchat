@@ -1,4 +1,4 @@
-
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,6 +8,16 @@
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="{% static 'css/loader.css' %}">
+<script>
+  setInterval(function(){
+    document.getElementById('loaderbackground').style.display="none";
+  },1000);
+
+  function showloader(){
+  document.getElementById("loaderbackground").style.display="block";
+}
+</script>
 {% block style %}
 <style>
 body {font-family: Arial, Helvetica, sans-serif;
@@ -150,7 +160,9 @@ border: 1px solid #888;
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 </head>
 <body onload="overlay()">
-
+  <div id="loaderbackground">
+    <div class="loading">Loading&#8230;</div>
+  </div>
   <nav class="navbar-expand-lg fixed-top navbar navbar-dark bg-dark">
     <a class="navbar-brand" href="/">
       <img src="/static/images/logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
@@ -161,10 +173,10 @@ border: 1px solid #888;
     </button>
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
       <ul class="navbar-nav">
-        <li class="nav-item">
+        <li class="nav-item" onclick="showloader()">
           <a class="nav-link" href="/login">Login</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" onclick="showloader()">
           <a class="nav-link" href="/signup">Signup</a>
         </li>
       </ul>
@@ -191,7 +203,7 @@ border: 1px solid #888;
                                 <label for="password">Password:</label><br>
                                 <input type="password" name="password" ><br>
                                 <br>
-                                <button type="submit" class="btn btn-primary right" >Login</button>
+                                <button type="submit" class="btn btn-primary right" onclick="showloader()">Login</button>
 
                                 </form>
                </div>
