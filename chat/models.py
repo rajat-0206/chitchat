@@ -26,4 +26,4 @@ class lastmessage(models.Model):
 
 class pic(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    pic_url=models.CharField(max_length=500,default='http://itschitchat.pythonanywhere.com/media/media/default.png')
+    pic_url=models.CharField(max_length=500,default='https://itschitchat.pythonanywhere.com/media/media/default.png')

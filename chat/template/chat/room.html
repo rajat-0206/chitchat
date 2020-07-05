@@ -499,6 +499,7 @@ function hideSnackBar(){
     if (this.readyState == 4 && this.status == 200) {
           document.getElementById('chat-log').innerHTML = this.responseText;
           var t=document.getElementById("message");
+   
       };
     }
   xhttp.open("POST","/show_message", true);
@@ -506,7 +507,11 @@ function hideSnackBar(){
   xhttp.send(url);
 },1000);
 
-          const roomName = JSON.parse(document.getElementById('room-name').textContent);
+function scrollbottom(){
+  
+}
+          
+const roomName = JSON.parse(document.getElementById('room-name').textContent);
 
 
 
