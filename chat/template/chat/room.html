@@ -110,11 +110,11 @@ window.OneSignal = window.OneSignal || [];
 		<div id="contacts">
 			<ul id="messagecolumn">
         {% for last in latestmessage %}
-        <a href="{{last.cus_id}}" onclick="showloader()">
+        <a href="{{last.cus_id}}">
           {% ifequal last.flag m_id %}
-				<li class="contact white">
+				<li class="contact white" onclick="showloader()">
           {% else %}
-          <li class="contact">
+          <li class="contact" onclick="showloader()">
            {% endifequal %}
 					<div class="wrap">
             {% ifequal last.flag m_id %}
