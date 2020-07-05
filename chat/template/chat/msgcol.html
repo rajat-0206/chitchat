@@ -1,5 +1,5 @@
 {% for last in latestmessage %}
-<a href="{{last.cus_id}}">
+<a href="{{last.cus_id}}" onclick="showloader()">
 {% ifequal last.flag m_id %}
     <li class="contact white" onclick='changecol(this)'>
 {% else %}

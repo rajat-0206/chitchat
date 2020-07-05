@@ -67,6 +67,14 @@ window.OneSignal = window.OneSignal || [];
     });
     OneSignal.setExternalUserId(myCustomUniqueUserId);
   });
+
+function logout(){
+  showloader();
+  OneSignal.push(function() {
+    OneSignal.removeExternalUserId();
+});
+window.location.replace('/user_logout');
+}
 </script>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -110,11 +118,11 @@ window.OneSignal = window.OneSignal || [];
 		<div id="contacts">
 			<ul id="messagecolumn">
         {% for last in latestmessage %}
-        <a href="{{last.cus_id}}">
+        <a href="{{last.cus_id}}" onclick="showloader()">
           {% ifequal last.flag m_id %}
-				<li class="contact white" onclick="showloader()">
+				<li class="contact white" onclick='changecol(this)'>
           {% else %}
-          <li class="contact" onclick="showloader()">
+          <li class="contact" onclick='changecol(this)'>
            {% endifequal %}
 					<div class="wrap">
             {% ifequal last.flag m_id %}
@@ -136,7 +144,7 @@ window.OneSignal = window.OneSignal || [];
 		<div id="bottom-bar">
 			<button id="newmsg"><i class="fa fa-user-plus fa-fw" aria-hidden="true"></i> <span>Send new Message</span></button>
       <button id="settings"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> <span>Settings</span></button>
-      <a href="/user_logout"><button id="logout" ><i class="fa fa-power-off" aria-hidden="true"></i> <span>Logout</span></button></a>
+      <button id="logout" onclick="document.getElementById('id05').style.display='block'"><i class="fa fa-power-off" aria-hidden="true"></i> <span>Logout</span></button></a>
 		</div>
 	</div>
 	<div class="content">
@@ -229,7 +237,7 @@ window.OneSignal = window.OneSignal || [];
         {% ifequal last.flag m_id %}
       <li class="contact white" onclick='changecol(this)'>
         {% else %}
-        <li class="contact" onclick="changecol(this)">
+        <li class="contact" onclick='changecol(this)'>
          {% endifequal %}
         <div class="wrap">
           {% ifequal last.flag m_id %}
@@ -355,6 +363,21 @@ window.OneSignal = window.OneSignal || [];
       <footer class="w3-container w3-teal" style="padding:10px;">
         <button class="w3-button w3-khaki" onclick="document.getElementById('id04').style.display='none'"  style="float:right; background-color: red; " >Cancel</button>
         <a href="/delete_account"><button class="w3-button w3-khaki"  style="float:right; margin-right:5px;" >Yes</button></a>
+      </footer>
+
+    </div>
+  </div>
+
+  <div id="id05" class="w3-modal">
+    <div class="w3-modal-content w3-animate-zoom" style="width:40%;">
+
+      <header class="w3-container w3-teal" style="padding:10px">
+        <center>
+        <h1 style="font-weight: bolder; font-size: 24px;">Are You sure you want to logout?</h1></center>
+      </header>
+      <footer class="w3-container w3-teal" style="padding:10px;">
+        <button class="w3-button w3-khaki" onclick="document.getElementById('id05').style.display='none'"  style="float:right; background-color: red; " >Cancel</button>
+        <button class="w3-button w3-khaki"  style="float:right; margin-right:5px;" onclick="logout()">Yes</button>
       </footer>
 
     </div>
