@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="{% static 'css/loader.css' %}">
 <script>
   setInterval(function(){
-    document.getElementById('loaderbackground').style.display="none";
+    document.getElementById('pagebackground').style.display="none";
   },1000);
 
   function showloader(){
@@ -160,7 +160,10 @@ border: 1px solid #888;
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 </head>
 <body onload="overlay()">
-  <div id="loaderbackground">
+  <div id="pagebackground">
+    <div class="loading">Loading&#8230;</div>
+  </div>
+  <div id="loaderbackground" style="display: none;">
     <div class="loading">Loading&#8230;</div>
   </div>
   <nav class="navbar-expand-lg fixed-top navbar navbar-dark bg-dark">
