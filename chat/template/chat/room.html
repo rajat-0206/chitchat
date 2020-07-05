@@ -520,6 +520,8 @@ function hideSnackBar(){
         document.querySelector('#chat-message-submit').onclick = function(e) {
             const messageInputDom = document.querySelector('#chat-message-input');
             const message = messageInputDom.value;
+            if(message.trim()!="")
+            {
             //document.querySelector('#chat-log').value += (data.message + '\n');
             //console.log(data.date+" "+data.time);
             var today = new Date();
@@ -556,6 +558,7 @@ function hideSnackBar(){
             messageInputDom.value = '';
             var t=document.getElementById("message");
             t.scrollTop=t.scrollHeight;
+        }
         }
     </script>
     <script type="text/javascript">
