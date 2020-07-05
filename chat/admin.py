@@ -1,7 +1,8 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import pic,dp,lastmessage
+from .models import pic,dp,lastmessage,changePassword
 admin.site.register(pic)
 admin.site.register(dp)
 admin.site.register(lastmessage)
+admin.site.register(changePassword)

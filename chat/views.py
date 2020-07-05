@@ -316,10 +316,11 @@ def sendemail(request,name_pass):
     subject = 'Change password for ChitChat'
     hash_object = hashlib.md5(name_pass.encode())
     sendlink=hash_object.hexdigest()
-    hashsave=changePassword.objects.create(token=sendlink,u_name=name_pass)
     u=User.objects.get(username=name_pass)
     messages = "Hi!!"+"\n"+"Here is the link to change your password"+"\n"+"https://itschitchat.herokuapp.com/passwordurl/"+sendlink
+    hashsave=changePassword.objects.create(token=sendlink,u_name='xcv')
     recepient =u.email
+    print(recepient)
     send_mail(subject,
         messages, EMAIL_HOST_USER, [recepient])
     error="Link to change password is sent to your mail."
