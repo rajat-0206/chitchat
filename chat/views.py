@@ -22,7 +22,6 @@ from .models import message_save,lastmessage
 global logged
 
 
-
 def manifest(request):
     return render(request,'chat/manifest.json')
 
@@ -152,19 +151,25 @@ def register(request):
     form = SignUpForm()
     if request.method == 'POST':
         form = SignUpForm(request.POST)
-        if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
-            raw_password = form.cleaned_data.get('password1')
-            user = authenticate(username=username, password=raw_password)
-            login(request, user)
-            o=User.objects.get(username=username)
-            r=pic.objects.create(user_id=o.id)
-            r.save()
-            error1="Registered Successfully!! Login to continue."
-            return render(request,'chat/login.html',{'error1':error1})
+        username=request.POST.get('username')
+
+        if "*" not in username and "@" not in username and "." not in username and "&" not in username and "^" not in username and "$" not in username and "#" not in username and "%" not in username and "-" not in username  and "+" not in username and "?" not in username :
+            if form.is_valid():
+                form.save()
+                username = form.cleaned_data.get('username')
+                raw_password = form.cleaned_data.get('password1')
+                user = authenticate(username=username, password=raw_password)
+                login(request, user)
+                o=User.objects.get(username=username)
+                r=pic.objects.create(user_id=o.id)
+                r.save()
+                error1="Registered Successfully!! Login to continue."
+                return render(request,'chat/login.html',{'error1':error1})
+            else:
+                return render(request,'chat/register.html',{'form': form})
         else:
-            return render(request,'chat/register.html',{'form': form})
+            error="Cannot use '.,!,@,#,$,%,^,&,*,-,+' in username"
+            return render(request,'chat/register.html',{'form': form, 'error':error})
     else:
         return render(request,'chat/register.html',{'form': form})
 
@@ -258,6 +263,8 @@ def save_message(request):
         time=request.POST.get("time")
         m=message_save.objects.create(text=message,cus_id=c_id_in,name=naam,time=time)
         m.save()
+        u=request.session['username']
+        name_notify=u.first_name+" "+u.last_name
         x=c_id_in.index("x")
         room_name1=int(c_id_in[0:x])
         room_name2=int(c_id_in[x+1:])
@@ -293,8 +300,12 @@ def save_message(request):
             new=lastmessage.objects.create(myid=name2,fid=name1,cus_id='https://itschitchat.herokuapp.com/chating/'+c_id_in,Uname=u_name2,f_id=m_id1,pic_url=pic.objects.get(user_id=m_id1).pic_url)
             new.save()
         header = {"Content-Type":"application/json; charset=utf-8","Authorization": "Basic NGQ1NDJmZmYtYjc2ZS00YTA5LThlZDMtYzA0MzQ3YTBhYjU1"}
-        payload = {"app_id":"56f464d8-5f40-479c-b005-7bbc1dff146d","include_external_user_ids":[recipient],"contents":{"en":"You have recieved a new message from "+naam},"headings":{"en":"Chitchat"},"url":"https://itschitchat.herokuapp.com/chating/"+c_id_in,"chrome_web_icon":"https://itschitchat.pythonanywhere.com/media/media/"+naam+".jpg","chrome_web_badge":"https://itschitchat.herokuapp.com/static/images/icon-192x192.png"}
+        payload = {"app_id":"56f464d8-5f40-479c-b005-7bbc1dff146d","include_external_user_ids":[recipient],"contents":{"en":"You have recieved a new message from "+name_notify},"headings":{"en":"Chitchat"},"url":"https://itschitchat.herokuapp.com/chating/"+c_id_in,"chrome_web_icon":"https://itschitchat.pythonanywhere.com/media/media/"+naam+".jpg","chrome_web_badge":"https://itschitchat.herokuapp.com/static/images/icon-192x192.png"}
         print(payload)
         req = requests.post("https://onesignal.com/api/v1/notifications", headers=header, data=json.dumps(payload))
         print(req.status_code, req.reason,req.text,sep="----000----")
         return HttpResponse("Sent")
+def test(request):
+    # u=forgotpass.objects.create()
+    # u.save()
+    return HttpResponse("test")

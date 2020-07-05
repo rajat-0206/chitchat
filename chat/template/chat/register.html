@@ -18,18 +18,18 @@ body {font-family: Arial, Helvetica, sans-serif;
 ::-webkit-scrollbar {
   width: 10px;
   border-radius: 10px;
-  
+
 }
 
- 
+
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #888; 
+  background: #888;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #555; 
+  background: #555;
 }
 button {
   background-color: white;
@@ -143,6 +143,7 @@ border: 1px solid #888;
 <br><br>
               <div class="container">
                 <form action="register" method="post">
+                    <p style="color: red">{{ error }}</p>
                 {% csrf_token %}
                 {% for field in form %}
                   <p>
