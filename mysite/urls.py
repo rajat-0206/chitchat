@@ -11,3 +11,5 @@ urlpatterns = [
 
 
 ]
+
+handler404 = 'chat.views.handle404'

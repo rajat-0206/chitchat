@@ -25,9 +25,9 @@ PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, 'chat/static/script', 'servicew
 SECRET_KEY = 'xbpdeoc&ni-w84aa$mch6yuq$uhbw-$5!k7mxfmxlmxh(9xi%('
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['itschitchat.herokuapp.com']
 
 
 # Application definition
