@@ -443,9 +443,6 @@ function showSnackBar(text = String(),hasAction = false,actionText = String(),is
     }
     snack.bar.classList.replace(snack.hideSnack,snack.showSnack);
     snack.bar.style.display = show;
-    setInterval(function(){
-        hideSnackBar();
-    },3000);
 }
 
 function replaceClasses(element,remove,set){
@@ -474,6 +471,7 @@ function hideSnackBar(){
      setInterval(function(){
        if(navigator.onLine)
        {
+        hideSnackBar();
       var xhttp = new XMLHttpRequest();
       var url = "room_name="+"{{room_name}}"+"&csrfmiddlewaretoken="+"{{csrf_token}}";
     xhttp.onreadystatechange = function() {
@@ -489,7 +487,6 @@ function hideSnackBar(){
   xhttp.send(url);
        }
   else{
-    alert();
     showSnackBar('You are offline!😞 Check your internet connection and refresh the page.',text =this.responseText,hasAction = false,actionText = String(),isNormal = true,isWarning = false);
   }
      },2000);
