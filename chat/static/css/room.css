@@ -1046,7 +1046,7 @@ a:hover{
         padding:5px;
       }
 
-      .snackbar{z-index:3;display:none;position: fixed;bottom:0;float:bottom;padding:4px;box-shadow: 1px 5px 5px #00000044;border-radius:4px;background-color: #216bd3;margin:12px}
+      .snackbar{z-index:4000;display:none;position: fixed;bottom:0;float:bottom;padding:4px;box-shadow: 1px 5px 5px #00000044;border-radius:4px;background-color: #216bd3;margin:12px}
       .snackText{padding:8px 16px!important;text-align:left;float:left;font-size: 18px;color:white;
       }
       .snack-button{
