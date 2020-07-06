@@ -195,19 +195,14 @@ border: 1px solid #888;
                   <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
               </div>
               <div class="scontainer">
-                  <div class="r">{{error1}}</div>
-                <form action=user_login method="post">
-                                {% csrf_token %}
-                                <label for="username">Username:</label><br>
-                                <input type="text" name="username" >
-                                <br>
 
-
-                                <label for="password">Password:</label><br>
-                                <input type="password" name="password" ><br>
-                                <br>
-                                <button type="submit" class="btn btn-primary right" onclick="showloader()">Login</button>
-                              <br>  <p style="font-size:15px; color: red; margin-top:10px;"> <a href="/password">Forgot Password?</a></p>
+                <form action=enteremail method="post">
+                  <br>
+                  <p style="color: red">{{ error }}</p>
+                  {% for user in acc %}
+              <a href="/change_pass/{{user.username}}"> <img src=" {{user.pic.pic_url}}" alt="" width="40px">{{user.first_name}} {{user.last_name}} ({{user.username}})</a>
+                <hr>
+                  {% endfor %}
 
                                 </form>
                </div>

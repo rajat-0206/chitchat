@@ -100,8 +100,8 @@ DATABASES = {
         }
     }
 }
-import dj_database_url
-DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
+# import dj_database_url
+# DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -146,13 +146,12 @@ STATICFILES_DIRS = [
     ]
 
 # STATIC_ROOT = os.path.join(BASE_DIR,'chat/static')
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-#
-# EMAIL_BACKEND ='django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_USE_TLS = True
-# EMAIL_PORT = 587
-# EMAIL_HOST_USER = 'incognito.notify@gmail.com'
-# EMAIL_HOST_PASSWORD = 'websitepassword404'
+EMAIL_BACKEND ='django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'incognito.notify@gmail.com'
+EMAIL_HOST_PASSWORD = 'websitepassword404'
+
 
 django_heroku.settings(locals())
