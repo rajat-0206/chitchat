@@ -445,7 +445,7 @@ function showSnackBar(text = String(),hasAction = false,actionText = String(),is
     snack.bar.style.display = show;
     setInterval(function(){
         hideSnackBar();
-    },2000);
+    },3000);
 }
 
 function replaceClasses(element,remove,set){
@@ -481,6 +481,7 @@ function hideSnackBar(){
           document.getElementById('messagecolumn').innerHTML = this.responseText;
           document.getElementById('searchmsgcolumn').innerHTML = this.responseText;
           myFunction();
+          searchmsg();
       };
     }
   xhttp.open("POST","/latest", true);
@@ -488,7 +489,8 @@ function hideSnackBar(){
   xhttp.send(url);
        }
   else{
-    alert('You are offline!😞 Check your internet connection and refresh the page.');
+    alert();
+    showSnackBar('You are offline!😞 Check your internet connection and refresh the page.',text =this.responseText,hasAction = false,actionText = String(),isNormal = true,isWarning = false);
   }
      },2000);
 
