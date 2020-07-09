@@ -57,32 +57,34 @@ def room(request, room_name):
     room_name1=int(room_name[0:x])
     room_name2=int(room_name[x+1:])
     recerror='f'
-    try:
-        if(room_name1==user.id):
-            rec = User.objects.get(id=room_name2)
+    if room_name1==user.id or room_name2==user.id:
+        try:
+            if(room_name1==user.id):
+                rec = User.objects.get(id=room_name2)
+            else:
+                rec = User.objects.get(id=room_name1)
+            reciver = rec.first_name +" "+rec.last_name
+        except Exception:
+            recerror='t'
+            rec=dp.objects.get(id=1)
+            reciver="Sorry!! User does not exists."
+        if room_name1>room_name2:
+            r=str(room_name1)+"x"+str(room_name2)
         else:
-            rec = User.objects.get(id=room_name1)
-        reciver = rec.first_name +" "+rec.last_name
-    except Exception:
-        recerror='t'
-        rec=dp.objects.get(id=1)
-        reciver="Sorry!! User does not exists."
-    if room_name1>room_name2:
-        r=str(room_name1)+"x"+str(room_name2)
+            r=str(room_2)+"x"+str(room_name1)
+
+        message_save_var=message_save.objects.filter(cus_id=r).order_by('id')
+        latestmessage=lastmessage.objects.filter(Uname=username).order_by('id')[::-1]
+
+        for l in latestmessage:
+
+            if l.cus_id=="https://itschitchat.herokuapp.com/chating/"+room_name :
+                l.flag='y'
+                l.save()
+
+        return render(request, 'chat/room.html', {"logged":logged,"users":allusers,"me":user,'rec':rec,'recerror':recerror,'room_name': room_name,"message_save_var":message_save_var,"Name":name,"Reciever":reciver,"latestmessage":latestmessage,'m_id':m_id})
     else:
-        r=str(room_2)+"x"+str(room_name1)
-
-    message_save_var=message_save.objects.filter(cus_id=r).order_by('id')
-    latestmessage=lastmessage.objects.filter(Uname=username).order_by('id')[::-1]
-
-    for l in latestmessage:
-
-        if l.cus_id=="https://itschitchat.herokuapp.com/chating/"+room_name :
-            l.flag='y'
-            l.save()
-
-    return render(request, 'chat/room.html', {"logged":logged,"users":allusers,"me":user,'rec':rec,'recerror':recerror,'room_name': room_name,"message_save_var":message_save_var,"Name":name,"Reciever":reciver,"latestmessage":latestmessage,'m_id':m_id})
-
+        HttpResponse("You are not authorised to view this page.")
 def latest(request):
     username = request.session['username']
     room_name = request.POST['room_name']
