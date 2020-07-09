@@ -655,6 +655,7 @@ a:hover{
   background: #2c3e50;
   color: #f5f5f5;
   word-wrap:break-word;
+  user-select: text;
 }
 #frame .content .messages ul li.replies img {
   float: right;
@@ -665,6 +666,7 @@ a:hover{
   color: #f5f5f5;
   float: right;
   word-wrap:break-word;
+  user-select: text;
 
 }
 
@@ -701,14 +703,19 @@ a:hover{
 #frame .content .message-input .wrap {
   position: relative;
 }
-#frame .content .message-input .wrap input {
+#frame .content .message-input .wrap textarea {
   font-family: "proxima-nova",  "Source Sans Pro", sans-serif;
   float: left;
   border: none;
   width: calc(100% - 90px);
   padding: 11px 32px 10px 8px;
-  font-size: 0.8em;
+  font-size: 1em;
   color: #32465a;
+  overflow-y: scroll;
+  word-wrap: break-word;
+}
+#frame .content .message-input .wrap textarea::-webkit-scrollbar{
+  display: none;
 }
 @media screen and (max-width: 735px) {
   #frame .content .message-input .wrap input {

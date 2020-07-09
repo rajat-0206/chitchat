@@ -174,7 +174,7 @@ window.location.replace('/user_logout');
   </div>
   <div class="message-input">
       <div class="wrap">
-      <input id="chat-message-input" type="text" placeholder="Write your message..." />
+        <textarea id="chat-message-input" type="text" rows='1' placeholder="Write your message..." ></textarea>
       <button class="submit" id="chat-message-submit" type="button" value="Send"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
        {{ room_name|json_script:"room-name" }}
 
