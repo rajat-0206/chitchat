@@ -657,6 +657,10 @@ a:hover{
   word-wrap:break-word;
   user-select: text;
 }
+
+#frame .content .messages ul li.sent p span {
+  user-select: none;
+}
 #frame .content .messages ul li.replies img {
   float: right;
   margin: 6px 0 0 8px;
@@ -668,6 +672,10 @@ a:hover{
   word-wrap:break-word;
   user-select: text;
 
+}
+
+#frame .content .messages ul li.replies p span {
+  user-select: none;
 }
 
 #frame .content .messages ul li img {
