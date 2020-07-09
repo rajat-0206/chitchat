@@ -496,8 +496,14 @@ function hideSnackBar(){
       var url = "room_name="+"{{room_name}}"+"&csrfmiddlewaretoken="+"{{csrf_token}}";
     xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
-          document.getElementById('chat-log').innerHTML = this.responseText;
-          var t=document.getElementById("message");
+      t = document.getElementById("message");
+        var original = t.scrollHeight;
+        document.getElementById('chat-log').innerHTML = this.responseText;
+          var a = t.scrollHeight;
+          if(original!=a)
+          {
+            t.scrollTop = t.scrollHeight;
+          }
    
       };
     }
@@ -506,9 +512,7 @@ function hideSnackBar(){
   xhttp.send(url);
 },1000);
 
-function scrollbottom(){
-  
-}
+
           
 const roomName = JSON.parse(document.getElementById('room-name').textContent);
 
