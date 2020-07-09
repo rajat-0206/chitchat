@@ -84,7 +84,7 @@ def room(request, room_name):
 
         return render(request, 'chat/room.html', {"logged":logged,"users":allusers,"me":user,'rec':rec,'recerror':recerror,'room_name': room_name,"message_save_var":message_save_var,"Name":name,"Reciever":reciver,"latestmessage":latestmessage,'m_id':m_id})
     else:
-        HttpResponse("You are not authorised to view this page.")
+        return HttpResponse("You are not authorised to view this page.")
 def latest(request):
     username = request.session['username']
     room_name = request.POST['room_name']
