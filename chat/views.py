@@ -116,7 +116,7 @@ def vcstatus(request,room_name):
         vc=0
         vcroom='0'
         for i in r:
-            if  int(room_name) == int(i.room):
+            if  room_name == i.room:
                 # if i.signal=="1":
                     vc=1
                     print(vc)

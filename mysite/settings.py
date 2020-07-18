@@ -28,6 +28,8 @@ SECRET_KEY = 'xbpdeoc&ni-w84aa$mch6yuq$uhbw-$5!k7mxfmxlmxh(9xi%('
 DEBUG = True
 
 ALLOWED_HOSTS = ['itschitchat.herokuapp.com']
+# ALLOWED_HOSTS = []
+
 
 
 # Application definition
