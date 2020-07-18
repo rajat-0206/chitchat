@@ -26,7 +26,7 @@ SECRET_KEY = 'xbpdeoc&ni-w84aa$mch6yuq$uhbw-$5!k7mxfmxlmxh(9xi%('
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-ALLOWED_HOSTS = ["itschitchat.herokuapp.com"]
+ALLOWED_HOSTS = ['itschitchat.herokuapp.com']
 
 
 # Application definition
@@ -140,12 +140,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
-#
-# STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR,'chat/static')
-#     ]
 
-STATIC_ROOT = os.path.join(BASE_DIR,'chat/static')
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR,'chat/static')
+    ]
+
+#STATIC_ROOT = os.path.join(BASE_DIR,'chat/static')
+
 EMAIL_BACKEND ='django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
@@ -154,4 +155,4 @@ EMAIL_HOST_USER = 'incognito.notify@gmail.com'
 EMAIL_HOST_PASSWORD = 'websitepassword404'
 
 
-# django_heroku.settings(locals())
+django_heroku.settings(locals())
