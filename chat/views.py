@@ -18,7 +18,7 @@ from django.contrib.sessions.models import Session
 import smtplib, ssl
 from mysite.settings import EMAIL_HOST_USER
 from django.core.mail import send_mail
-from .models import message_save,lastmessage,changePassword
+from .models import message_save,lastmessage,changePassword,videocall,blockuser
 import hashlib
 global logged
 
@@ -72,7 +72,12 @@ def room(request, room_name):
             r=str(room_name1)+"x"+str(room_name2)
         else:
             r=str(room_2)+"x"+str(room_name1)
-
+        block=blockuser.objects.all()
+        b=0
+        for i in block:
+            if i==r:
+                b=1
+                break
         message_save_var=message_save.objects.filter(cus_id=r).order_by('id')
         latestmessage=lastmessage.objects.filter(Uname=username).order_by('id')[::-1]
 
@@ -82,7 +87,7 @@ def room(request, room_name):
                 l.flag='y'
                 l.save()
 
-        return render(request, 'chat/room.html', {"logged":logged,"users":allusers,"me":user,'rec':rec,'recerror':recerror,'room_name': room_name,"message_save_var":message_save_var,"Name":name,"Reciever":reciver,"latestmessage":latestmessage,'m_id':m_id})
+        return render(request, 'chat/room.html', {"logged":logged,"users":allusers,"me":user,'rec':rec,'recerror':recerror,'room_name': room_name,"block":b,"message_save_var":message_save_var,"Name":name,"Reciever":reciver,"latestmessage":latestmessage,'m_id':m_id})
     else:
         return HttpResponse("You are not authorised to view this page.")
 def latest(request):
@@ -95,8 +100,32 @@ def latest(request):
         if l.cus_id=="https://itschitchat.herokuapp.com/chating/"+room_name :
             l.flag='y'
             l.save()
-    return render(request,'chat/msgcol.html',{"latestmessage":latestmessage,'m_id':m_id})
-
+    r=videocall.objects.all()
+    vc=0
+    vcroom='0'
+    for i in r:
+        if  int(m_id) == int(i.user_id):
+            # if i.signal=="1":
+                vc=1
+                print(vc)
+                vcroom=i.room
+                break
+    return render(request,'chat/msgcol.html',{"latestmessage":latestmessage,'m_id':m_id,'vc':vc,'vcroom':vcroom})
+def vcstatus(request,room_name):
+        r=videocall.objects.all()
+        vc=0
+        vcroom='0'
+        for i in r:
+            if  int(room_name) == int(i.room):
+                # if i.signal=="1":
+                    vc=1
+                    print(vc)
+                    vcroom=i.room
+                    break
+        if vc==1:
+            return HttpResponse("On")
+        else:
+            return HttpResponse("Off")
 def evaluate(request, room_url):
     x=room_url.index("x")
     room_url1=int(room_url[0:x])
@@ -349,3 +378,50 @@ def change_pass_confirm(request,url_token):
             return HttpResponse("Sorry you can't access the page. Please contact admin")
     else:
         return render(request,'chat/password_reset_form.html',{'url':url_token})
+def videoCall(request,room_name):
+    user=User.objects.get(username=request.session['username'])
+    room=room_name
+    room_name=room_name.split("x")
+    room1=room_name[0]
+    room2=room_name[1]
+    if user.id==room1:
+        fr_id=room2
+        my_id=room1
+    else:
+        my_id=room2
+        fr_id=room1
+    r=videocall.objects.create(user_id=my_id,signal='0',friend=fr_id,room=room)
+    r.save()
+    r=videocall.objects.create(user_id=fr_id,signal='1',friend=my_id,room=room)
+    r.save()
+    name=User.objects.get(id=fr_id)
+    header = {"Content-Type":"application/json; charset=utf-8","Authorization": "Basic NGQ1NDJmZmYtYjc2ZS00YTA5LThlZDMtYzA0MzQ3YTBhYjU1"}
+    payload = {"app_id":"56f464d8-5f40-479c-b005-7bbc1dff146d","include_external_user_ids":[name.username],"contents":{"en":"Incomming videocall from "+user.username},"headings":{"en":"Chitchat"},"url":"https://itschitchat.herokuapp.com/","chrome_web_icon":"https://itschitchat.pythonanywhere.com/media/media/"+user.username+".jpg","chrome_web_badge":"https://itschitchat.herokuapp.com/static/images/icon-192x192.png"}
+    print(payload)
+    req = requests.post("https://onesignal.com/api/v1/notifications", headers=header, data=json.dumps(payload))
+    print(req.status_code, req.reason,req.text,sep="----000----")
+    return render(request,'chat/videocall.html',{'room_name':room})
+# def checkvc(request):
+#     r=videocall.objects.get(signal="1")
+def acceptvc(request,u_id):
+    r=videocall.objects.get(user_id=u_id)
+    room_name=r.room
+    r.signal="0"
+    r.save()
+    return render(request,'chat/videocall.html',{'room_name':room_name})
+def video_call_cut(request,room_name):
+    r=videocall.objects.filter(room=room_name)
+    for i in r:
+        i.delete()
+    return redirect('/')
+def blockUser(request,room):
+    user=User.objects.get(username=request.session['username'])
+    r=blockuser.objects.create(room=room,by_id=user.id)
+    r.save()
+    return redirect('https://itschitchat.herokuapp.com/chating/'+room)
+def unblockuser(request,room):
+    user=User.objects.get(username=request.session['username'])
+    r=blockuser.objects.get(room=room)
+    if r.by_id==user.id:
+        r.delete()
+    return redirect('https://itschitchat.herokuapp.com/chating/'+room)

@@ -29,4 +29,12 @@ class pic(models.Model):
     pic_url=models.CharField(max_length=500,default='https://itschitchat.pythonanywhere.com/media/media/default.png')
 class changePassword(models.Model):
     token = models.CharField(max_length=500)
-    u_name=models.CharField(max_length=200)
+    models.CharField(max_length=20)
+class videocall(models.Model):
+    user=models.OneToOneField(User,on_delete=models.CASCADE)
+    friend=models.CharField(max_length=20)
+    signal=models.BooleanField(default='0')
+    room=models.CharField(max_length=20)
+class blockuser(models.Model):
+    room=models.CharField(max_length=20)
+    by_id=models.IntegerField(max_length=20)

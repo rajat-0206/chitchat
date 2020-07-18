@@ -12,7 +12,7 @@
     setInterval(() => {
       document.getElementById('pagebackground').style.display="none";
     }, 2000);
-  
+
     function showloader(){
     document.getElementById("loaderbackground").style.display="block";
   }
@@ -159,6 +159,7 @@ window.location.replace('/user_logout');
       <img src="{{rec.pic_url}}" alt="" />
       {% endif %}
       <p>{{Reciever}}</p>
+      <a class="video_cam" href="/videocall/{{room_name}}/"><i class="fa fa-video-camera"></i></a>
   </div>
   <div class="messages" id="message" style="user-select:none">
   <ul id="chat-log">
@@ -258,7 +259,32 @@ window.location.replace('/user_logout');
       </div>
     </div>
   </div>
-</div>
+
+  <div class="videocallmodel">
+    {% ifequal vc "1" %}
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+
+  <div id="id05" class="w3-modal" style="display: block">
+    <div class="w3-modal-content w3-card-4">
+      <header class="w3-container w3-teal">
+        <h2>Incomming Call</h2>
+      </header>
+      <div class="w3-container">
+        {% if audio %}
+        <p>You have a incomming audio call from {{Name}}</p>
+        {% else %}
+        <p>You have a incomming video call from {{Name}}</p>
+        {% endif %}
+      </div>
+      <footer class="w3-container w3-teal">
+        <a href="/video_call_cut/{{vcroom}}"><button class="w3-button w3-red" onclick="document.getElementById('id05').style.display='none'">Decline</button></a>
+         <a href="/acceptvc/{{me.id}}" ><button class="w3-button w3-green" onclick="myFunction()">Answer</button></a>
+
+      </footer>
+    </div>
+  </div>
+  {% endifequal %}
   </div>
 
   <div id="id01" class="w3-modal">
@@ -504,7 +530,7 @@ function hideSnackBar(){
           {
             t.scrollTop = t.scrollHeight;
           }
-   
+
       };
     }
   xhttp.open("POST","/show_message", true);
@@ -513,7 +539,7 @@ function hideSnackBar(){
 },1000);
 
 
-          
+
 const roomName = JSON.parse(document.getElementById('room-name').textContent);
 
 
