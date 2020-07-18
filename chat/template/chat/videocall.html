@@ -26,6 +26,7 @@
   }
 </style>
 <body>
+  <audio src="{% static 'audio.mp3' %}" loop="loop" id="caller"></audio>
         <div class="modal-dialog" style="margin-top:0px;margin-bottom: 0px; width:100%;height:100%;background-color: #000">
             <div class="modal-content" style="height:100%;background-color: #000">
                 <div class="close-modal end-call hide" data-dismiss="modal">
@@ -135,6 +136,7 @@ function startWebRTC(isOfferer) {
  pc.onaddstream = event => {
 
    remoteVideo.srcObject = event.stream;
+   document.getElementById("caller").pause();
    if(event.stream.video===false){
     console.log("video not comming");
    }
@@ -149,6 +151,11 @@ function startWebRTC(isOfferer) {
  }).then(stream => {
    // Display your local video in #localVideo element
    localVideo.srcObject = stream;
+   {% ifequal accept  "no" %}
+   document.getElementById("caller").play();
+   {% else %}
+   
+   {% endifequal %}
    // Add your stream to be sent to the conneting peer
    pc.addStream(stream);
  }, onError);

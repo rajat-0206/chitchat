@@ -395,12 +395,18 @@ def videoCall(request,room_name):
     r=videocall.objects.create(user_id=fr_id,signal='1',friend=my_id,room=room)
     r.save()
     name=User.objects.get(id=fr_id)
+    if(name.username==user.username):
+        name=User.objects.get(id=my_id)
+        recipient = name.username
+    else:
+        recipient = name.username
+    print(recipient)
     header = {"Content-Type":"application/json; charset=utf-8","Authorization": "Basic NGQ1NDJmZmYtYjc2ZS00YTA5LThlZDMtYzA0MzQ3YTBhYjU1"}
     payload = {"app_id":"56f464d8-5f40-479c-b005-7bbc1dff146d","include_external_user_ids":[name.username],"contents":{"en":"Incomming videocall from "+user.username},"headings":{"en":"Chitchat"},"url":"https://itschitchat.herokuapp.com/","chrome_web_icon":"https://itschitchat.pythonanywhere.com/media/media/"+user.username+".jpg","chrome_web_badge":"https://itschitchat.herokuapp.com/static/images/icon-192x192.png"}
     print(payload)
     req = requests.post("https://onesignal.com/api/v1/notifications", headers=header, data=json.dumps(payload))
     print(req.status_code, req.reason,req.text,sep="----000----")
-    return render(request,'chat/videocall.html',{'room_name':room})
+    return render(request,'chat/videocall.html',{'room_name':room,"accept":"no"})
 # def checkvc(request):
 #     r=videocall.objects.get(signal="1")
 def acceptvc(request,u_id):
@@ -408,7 +414,7 @@ def acceptvc(request,u_id):
     room_name=r.room
     r.signal="0"
     r.save()
-    return render(request,'chat/videocall.html',{'room_name':room_name})
+    return render(request,'chat/videocall.html',{'room_name':room_name,"accept":"yes"})
 def video_call_cut(request,room_name):
     r=videocall.objects.filter(room=room_name)
     for i in r:

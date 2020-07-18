@@ -26,6 +26,7 @@ SECRET_KEY = 'xbpdeoc&ni-w84aa$mch6yuq$uhbw-$5!k7mxfmxlmxh(9xi%('
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+
 ALLOWED_HOSTS = ['itschitchat.herokuapp.com']
 
 
