@@ -349,6 +349,11 @@ def sendemail(request,name_pass):
     sendlink=hash_object.hexdigest()
     u=User.objects.get(username=name_pass)
     messages = "Hi!!"+"\n"+"Here is the link to change your password"+"\n"+"https://itschitchat.herokuapp.com/passwordurl/"+sendlink
+    already=changePassword.objects.all()
+    for i in already:
+        if i.u_name==u.username:
+            i.delete()
+            break
     hashsave=changePassword.objects.create(token=sendlink,u_name=u.username)
     recepient =u.email
     print(recepient)
