@@ -22,7 +22,12 @@ from .models import message_save,lastmessage,changePassword,videocall,blockuser
 import hashlib
 global logged
 
+def handle404(request,exception):
+    return render(request,"404.html")
 
+def handle500(request):
+    return render(request,"500.html")
+    
 def manifest(request):
     return render(request,'chat/manifest.json')
 
@@ -349,11 +354,6 @@ def sendemail(request,name_pass):
     sendlink=hash_object.hexdigest()
     u=User.objects.get(username=name_pass)
     messages = "Hi!!"+"\n"+"Here is the link to change your password"+"\n"+"https://itschitchat.herokuapp.com/passwordurl/"+sendlink
-    already=changePassword.objects.all()
-    for i in already:
-        if i.u_name==u.username:
-            i.delete()
-            break
     hashsave=changePassword.objects.create(token=sendlink,u_name=u.username)
     recepient =u.email
     print(recepient)
