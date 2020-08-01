@@ -23,10 +23,10 @@ import hashlib
 global logged
 
 def handle404(request,exception):
-    return render(request,"404.html")
+    return render(request,"chat/404.html")
 
 def handle500(request):
-    return render(request,"500.html")
+    return render(request,"chat/500.html")
     
 def manifest(request):
     return render(request,'chat/manifest.json')

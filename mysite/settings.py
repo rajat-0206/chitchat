@@ -25,7 +25,7 @@ PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, 'chat/static/script', 'servicew
 SECRET_KEY = 'xbpdeoc&ni-w84aa$mch6yuq$uhbw-$5!k7mxfmxlmxh(9xi%('
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG =False
 
 ALLOWED_HOSTS = ['itschitchat.herokuapp.com']
 # ALLOWED_HOSTS = []
@@ -144,11 +144,11 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR,'chat/static')
-    ]
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR,'chat/static')
+#     ]
 
-#STATIC_ROOT = os.path.join(BASE_DIR,'chat/static')
+STATIC_ROOT = os.path.join(BASE_DIR,'chat/static')
 
 EMAIL_BACKEND ='django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
