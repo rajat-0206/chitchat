@@ -348,41 +348,35 @@ def enteremail(request):
 def forgot(request):
     return render(request,'chat/password_reset.html')
 
-def sendemail(request,name_pass):
-    subject = 'Change password for ChitChat'
-    hash_object = hashlib.md5(name_pass.encode())
-    sendlink=hash_object.hexdigest()
-    u=User.objects.get(username=name_pass)
-    messages = "Hi!!"+"\n"+"Here is the link to change your password"+"\n"+"https://itschitchat.herokuapp.com/passwordurl/"+sendlink
-    hashsave=changePassword.objects.create(token=sendlink,u_name=u.username)
-    recepient =u.email
-    print(recepient)
-    send_mail(subject,
-        messages, EMAIL_HOST_USER, [recepient])
-    error="Link to change password is sent to your mail."
-    return render(request ,'chat/error.html',{'error':error})
+def generateOTP() :
+    lis=[1,2,3,4,5,6,7,8,9,0,'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
+    OTP=str(random.choice(lis))+str(random.choice(lis))+str(random.choice(lis))+str(random.choice(lis))+str(random.choice(lis))+str(random.choice(lis))
+    return OTP
 
-def change_pass_confirm(request,url_token):
+def sendemail(request):
+    name_pass=request.POST["name"]
+    subject = 'Change password for ChitChat'
+    u=User.objects.get(username=name_pass)
+    o=generateOTP()
+    print(o)
+    messages = "Hi!!"+"\n"+"Here is the OTP to change your password:"+"\n"+o
+    recepient =u.email
+    # send_mail(subject,
+    #     messages, EMAIL_HOST_USER, [recepient])
+    error="Link to change password is sent to your mail."
+    return HttpResponse(o)
+
+def change_pass_confirm(request):
     if request.method=='POST':
-        if changePassword.objects.get(token=url_token):
-            s=changePassword.objects.get(token=url_token)
-            name=s.u_name
-            user=User.objects.get(username=name)
-            password1= request.POST.get("pass1")
-            password2= request.POST.get("pass2")
-            if password1==password2 and len(password1)>=8:
-                user.set_password(password1)
-                user.save()
-                s.delete()
-                error="Password Changed Succesfully.Login to continue."
-                return render(request ,'chat/error.html',{'error':error})
-            else:
-                error="Either password is less than 8 digits or password did not match with confirm password"
-                return render(request,'chat/password_reset_form.html',{'url':url_token,'error':error})
-        else:
-            return HttpResponse("Sorry you can't access the page. Please contact admin")
+        name=request.POST['username']
+        user=User.objects.get(username=name)
+        password1= request.POST.get("pass1")
+        user.set_password(password1)
+        user.save()
+        error="Password Changed Succesfully.Login to continue."
+        return render(request,'chat/login.html',{'error1':error})
     else:
-        return render(request,'chat/password_reset_form.html',{'url':url_token})
+        return HttpResponse("Sorry you can't access the page. Please contact admin")
 def videoCall(request,room_name):
     user=User.objects.get(username=request.session['username'])
     room=room_name
