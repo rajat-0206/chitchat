@@ -361,8 +361,8 @@ def sendemail(request):
     print(o)
     messages = "Hi!!"+"\n"+"Here is the OTP to change your password:"+"\n"+o
     recepient =u.email
-    # send_mail(subject,
-    #     messages, EMAIL_HOST_USER, [recepient])
+    send_mail(subject,
+        messages, EMAIL_HOST_USER, [recepient])
     error="Link to change password is sent to your mail."
     return HttpResponse(o)
 
