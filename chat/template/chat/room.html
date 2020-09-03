@@ -159,7 +159,8 @@ window.location.replace('/user_logout');
       <img src="{{rec.pic_url}}" alt="" />
       {% endif %}
       <p>{{Reciever}}</p>
-      <a class="video_cam" href="/videocall/{{room_name}}/"><i class="fa fa-video-camera"></i></a>
+      <a class="video_cam" href="/videocall/{{room_name}}/"><i class="fa fa-video-camera" title="video call"></i></a>
+      <a class="video_cam" href="/block/{{room_name}}"><i class="fa fa-ban" title="block user"></i></a>
   </div>
   <div class="messages" id="message" style="user-select:none">
   <ul id="chat-log">
