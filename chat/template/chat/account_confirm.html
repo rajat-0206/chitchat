@@ -9,6 +9,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="{% static 'css/loader.css' %}">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
   setInterval(function(){
     document.getElementById('pagebackground').style.display="none";
@@ -34,10 +35,12 @@ button {
   color: black;
   text-align: center;
   padding: 14px 20px;
-  margin: 8px 0;
+  /* margin: 8px 0; */
   border: none;
   cursor: pointer;
-  width: 40%;
+  /* width: 40%; */
+  margin-left: 0px;;
+  
   border-radius: 10%;
 }
 button:hover {
@@ -195,29 +198,110 @@ border: 1px solid #888;
                   <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
               </div>
               <div class="scontainer">
-
-                <form action=enteremail method="post">
                   <br>
                   <p style="color: red">{{ error }}</p>
                   {% for user in acc %}
-              <a href="/change_pass/{{user.username}}"> <img src=" {{user.pic.pic_url}}" alt="" width="40px">{{user.first_name}} {{user.last_name}} ({{user.username}})</a>
+               <img src=" {{user.pic.pic_url}}" alt="" width="40px">{{user.first_name}} {{user.last_name}} ({{user.username}}) <span><button class="w3-button w3-blue" style="float: right;" onclick="sendmailfunc('{{user.username}}')">Send Mail</button></span>
                 <hr>
                   {% endfor %}
 
+               </div>
+        </div></div>
+        <div class = "modalcontainer animate" id="id02" style="display: none;">
+          <div class="scard-body">
+      <div class="simgcontainer">
+                <img src="/static/images/icon-192x192.png" width="80" height="80"  alt="Chit Chat" class="avatar">
+
+              </div>
+              <div class="scontainer w3-padding">
+                  <div class="r">{{error}}</div>
+                <form action=/passwordurl method="post">
+                                {% csrf_token %}
+                                <label >OTP:</label><span style="color: red;font-size: 16px;" id="otperror"></span><br>
+                                <input type="text" name="otp" id="otp" onkeyup="otpverify()">
+                                <br>
+                                <label >New Password:</label><span style="font-size: 10px;" id="pass1error" ></span><br>
+                                <input type="password"  name="pass1" id="pass1" onkeyup="passlen()" >
+                                <br>
+                                <label >Confirm Password:</label><br>
+                                <input type="password" name="pass2" style="outline: none;" id="pass2" onkeyup="passverify()" >
+                                <input type="text" name="username" id="usernameid" style="display: none;">
+                                <button type="submit" id="submitbutton" disabled class="btn btn-primary right w3-margin-top">Change Password</button>
                                 </form>
                </div>
-        </div>
+        </div></div>
 
 <script>
-
+var otp;
 function overlay() {
     {
         document.getElementById('id01').style.display='block';
     }
 }
-
+function sendmailfunc(name){
+  $.post("/forgot_change_pass",{
+    'name':name,
+    'csrfmiddlewaretoken':"{{csrf_token}}"},
+    function(data,status){
+    if (status=="success"){
+      otp=data;
+      // alert(otp);
+      document.getElementById('usernameid').value=name;
+      document.getElementById('id01').style.display='none';
+      document.getElementById('id02').style.display='block';
+    }
+  })
+}
 
 </script>
+<script>
+  function otpverify(){
+    temp1=document.getElementById('otp');
+    temp=document.getElementById('otp').value;
+    // btn=document.getElementById('submitbutton');
+    error=document.getElementById('otperror');
+    if (temp!=otp){
+      error.innerHTML="OTP does not match.";
+      // btn.disabled=true;
+    }
+    else{
+      error.innerHTML="OTP Matched.";error.style.color="green";
+      // btn.disabled=false;
+      temp1.disabled=true;
+    }
+  }
+  function passlen(){
+    temp1=document.getElementById('pass1').value;
+    btn=document.getElementById('submitbutton');
+    error=document.getElementById('pass1error');
+    if (temp1.length<8){
+      error.innerHTML="Password Too Short.";error.style.color="red";
+      btn.disabled=true;
+    }
+    else{
+      error.innerHTML=""
+    }
+    }
+    
+
+
+  function passverify(){
+    temp1=document.getElementById('pass1').value;
+    temp2=document.getElementById('pass2').value;
+    error=document.getElementById('pass2');
+    btn=document.getElementById('submitbutton');
+    // error=document.getElementById('passerror');
+    if (temp1!=temp2){
+      error.style.borderColor="red";
+      btn.disabled=true;
+    }
+    else{
+     btn.disabled=false;
+     error.style.borderColor="green";
+    }
+  }
+</script>
+
 {% endblock %}
 
 </body>

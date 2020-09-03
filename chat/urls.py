@@ -33,8 +33,8 @@ urlpatterns = [
     path('show_message',views.show_message,name='show_message'),
     path('password',views.forgot,name='forgot'),
     path('enteremail',views.enteremail,name='enteremail'),
-    path('change_pass/<str:name_pass>/',views.sendemail,name='sendemail'),
-    path('passwordurl/<str:url_token>/',views.change_pass_confirm,name='change_pass_confirm')
+    path('forgot_change_pass',views.sendemail,name='sendemail'),
+    path('passwordurl',views.change_pass_confirm,name='change_pass_confirm')
     # path('serviceworker.js', (TemplateView.as_view(template_name="chat/serviceworker.js", content_type='application/javascript', )), name='sw.js'),
     # path('OneSignalSDKUpdaterWorker.js', (TemplateView.as_view(template_name="chat/OneSignalSDKUpdaterWorker.js", content_type='application/javascript', )), name='OneSignalSDKUpdaterWorker.js'),
     # path('OneSignalSDKWorker.js', (TemplateView.as_view(template_name="chat/OneSignalUpdaterWorker.js", content_type='application/javascript', )), name='OneSignalWorker.js'),
