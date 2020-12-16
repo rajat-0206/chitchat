@@ -1,8 +1,0 @@
-{% for m in message_save_var %}
-  {% ifequal m.name me.username %}
-  <li class="replies"><p>{{m.text}}<span class="rightalg">{{m.time}}</span></p></li>
-  {% else %}
-  <li class="sent"><p>{{m.text}} <span class="rightalg">{{m.time}}</span></p></li>
-  <!-- <p class="pname">{{m.name}}</p> -->
-  {% endifequal %}
-  {% endfor %}

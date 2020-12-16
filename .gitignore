@@ -1,0 +1,9 @@
+/db.sqlite3
+
+/mysite/*
+
+/chat/*
+
+/mysite/settings.py
+
+/Procfile
